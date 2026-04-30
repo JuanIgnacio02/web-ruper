@@ -11,45 +11,39 @@ const EMPTY: ProductFilters = { raza: '', etapa: '', linea: '' }
 
 const PANELS = [
   {
-    animal: 'perros' as AnimalCategory,
-    label: 'PERROS', emoji: '🐶',
-    bg: 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=900&q=80&fit=crop',
-    /* gradient overlay activo — tono cálido naranja */
-    overlayActive:   'bg-gradient-to-t from-[#1B1B2F]/90 via-[#FF6B35]/30 to-transparent',
-    overlayInactive: 'bg-gradient-to-t from-[#1B1B2F]/80 via-black/50 to-black/30',
-    accentColor: 'var(--primary)',
+    animal:  'perros' as AnimalCategory,
+    label:   'PERROS',
+    emoji:   '🐶',
+    bg:      'https://images.unsplash.com/photo-1552053831-71594a27632d?w=900&q=80&fit=crop',
+    overlay: 'linear-gradient(160deg,rgba(255,107,53,.72) 0%,rgba(217,90,40,.60) 100%)',
     filters: [
-      { key: 'raza'  as keyof ProductFilters, label: 'Tamaño de Raza', options: [{ v: 'pequeña', l: 'Pequeñas' }, { v: 'mediana', l: 'Medianas' }, { v: 'grande', l: 'Grandes' }] },
-      { key: 'etapa' as keyof ProductFilters, label: 'Etapa de vida',   options: [{ v: 'cachorro', l: 'Cachorros' }, { v: 'adulto', l: 'Adultos' }, { v: 'senior', l: 'Senior' }] },
-      { key: 'linea' as keyof ProductFilters, label: 'Línea',           options: [{ v: 'economica', l: 'Económica' }, { v: 'premium', l: 'Premium' }, { v: 'super-premium', l: 'Super Premium' }] },
+      { key: 'raza'  as keyof ProductFilters, label: 'Tamaño de Raza',   options: [{ v: 'pequeña', l: 'Pequeñas' },    { v: 'mediana', l: 'Medianas' },      { v: 'grande', l: 'Grandes' }] },
+      { key: 'etapa' as keyof ProductFilters, label: 'Etapa de vida',    options: [{ v: 'cachorro', l: 'Cachorros' },   { v: 'adulto',  l: 'Adultos' },       { v: 'senior', l: 'Senior' }] },
+      { key: 'linea' as keyof ProductFilters, label: 'Línea',            options: [{ v: 'economica', l: 'Económica' }, { v: 'premium', l: 'Premium' },       { v: 'super-premium', l: 'Super Premium' }] },
     ],
   },
   {
-    animal: 'gatos' as AnimalCategory,
-    label: 'GATOS', emoji: '🐱',
-    bg: 'https://images.unsplash.com/photo-1533743983669-94fa5c4338ec?w=900&q=80&fit=crop',
-    /* gradient overlay activo — tono violeta */
-    overlayActive:   'bg-gradient-to-t from-[#1B1B2F]/90 via-[#7C3AED]/25 to-transparent',
-    overlayInactive: 'bg-gradient-to-t from-[#1B1B2F]/80 via-black/50 to-black/30',
-    accentColor: '#A78BFA',
+    animal:  'gatos' as AnimalCategory,
+    label:   'GATOS',
+    emoji:   '🐱',
+    bg:      'https://images.unsplash.com/photo-1533743983669-94fa5c4338ec?w=900&q=80&fit=crop',
+    overlay: 'linear-gradient(160deg,rgba(124,58,237,.72) 0%,rgba(91,33,182,.60) 100%)',
     filters: [
-      { key: 'raza'  as keyof ProductFilters, label: 'Tipo de gato',   options: [{ v: 'interior', l: 'Interior' }, { v: 'exterior', l: 'Exterior' }, { v: 'castrado', l: 'Castrado' }] },
-      { key: 'etapa' as keyof ProductFilters, label: 'Etapa de vida',  options: [{ v: 'cachorro', l: 'Gatito' }, { v: 'adulto', l: 'Adulto' }, { v: 'senior', l: 'Senior' }] },
-      { key: 'linea' as keyof ProductFilters, label: 'Línea',          options: [{ v: 'economica', l: 'Económica' }, { v: 'premium', l: 'Premium' }, { v: 'super-premium', l: 'Super Premium' }] },
+      { key: 'raza'  as keyof ProductFilters, label: 'Tipo de gato',    options: [{ v: 'interior', l: 'Interior' },   { v: 'exterior', l: 'Exterior' },     { v: 'castrado', l: 'Castrado' }] },
+      { key: 'etapa' as keyof ProductFilters, label: 'Etapa de vida',   options: [{ v: 'cachorro', l: 'Gatito' },     { v: 'adulto',   l: 'Adulto' },       { v: 'senior',   l: 'Senior' }] },
+      { key: 'linea' as keyof ProductFilters, label: 'Línea',           options: [{ v: 'economica', l: 'Económica' }, { v: 'premium',  l: 'Premium' },      { v: 'super-premium', l: 'Super Premium' }] },
     ],
   },
   {
-    animal: 'granja' as AnimalCategory,
-    label: 'GRANJA', emoji: '🐄',
-    bg: 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=900&q=80&fit=crop',
-    /* gradient overlay activo — tono verde */
-    overlayActive:   'bg-gradient-to-t from-[#1B1B2F]/90 via-[#2D6A4F]/35 to-transparent',
-    overlayInactive: 'bg-gradient-to-t from-[#1B1B2F]/80 via-black/50 to-black/30',
-    accentColor: '#6EE7B7',
+    animal:  'granja' as AnimalCategory,
+    label:   'GRANJA',
+    emoji:   '🐄',
+    bg:      'https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=900&q=80&fit=crop',
+    overlay: 'linear-gradient(160deg,rgba(45,106,79,.72) 0%,rgba(29,74,54,.60) 100%)',
     filters: [
-      { key: 'raza'  as keyof ProductFilters, label: 'Especie',           options: [{ v: 'equinos', l: 'Equinos' }, { v: 'bovinos', l: 'Bovinos' }, { v: 'porcinos', l: 'Porcinos' }, { v: 'ovinos', l: 'Ovinos' }, { v: 'aves', l: 'Aves de corral' }] },
-      { key: 'etapa' as keyof ProductFilters, label: 'Etapa / Propósito', options: [{ v: 'crecimiento', l: 'Crecimiento' }, { v: 'mantenimiento', l: 'Mantenimiento' }, { v: 'postura', l: 'Postura / Producción' }] },
-      { key: 'linea' as keyof ProductFilters, label: 'Presentación',      options: [{ v: 'pellet', l: 'Pellet' }, { v: 'extrusado', l: 'Extrusado' }, { v: 'harinas', l: 'Harinas' }] },
+      { key: 'raza'  as keyof ProductFilters, label: 'Especie',            options: [{ v: 'equinos', l: 'Equinos' }, { v: 'bovinos', l: 'Bovinos' }, { v: 'porcinos', l: 'Porcinos' }, { v: 'ovinos', l: 'Ovinos' }, { v: 'aves', l: 'Aves de corral' }] },
+      { key: 'etapa' as keyof ProductFilters, label: 'Etapa / Propósito',  options: [{ v: 'crecimiento', l: 'Crecimiento' }, { v: 'mantenimiento', l: 'Mantenimiento' }, { v: 'postura', l: 'Postura / Producción' }] },
+      { key: 'linea' as keyof ProductFilters, label: 'Presentación',       options: [{ v: 'pellet', l: 'Pellet' }, { v: 'extrusado', l: 'Extrusado' }, { v: 'harinas', l: 'Harinas' }] },
     ],
   },
 ]
@@ -57,26 +51,27 @@ const PANELS = [
 export default function AnimalSelector({ activeAnimal, onFilter }: Props) {
   const [expanded, setExpanded] = useState<AnimalCategory>('perros')
   const [selects, setSelects]   = useState<Record<AnimalCategory, ProductFilters>>({
-    perros:      { ...EMPTY },
-    gatos:       { ...EMPTY },
-    granja:      { ...EMPTY },
-    aves:        { ...EMPTY },
-    'pequeños':  { ...EMPTY },
-    peces:       { ...EMPTY },
-    accesorios:  { ...EMPTY },
+    perros: { ...EMPTY }, gatos: { ...EMPTY }, granja: { ...EMPTY },
+    aves: { ...EMPTY }, 'pequeños': { ...EMPTY }, peces: { ...EMPTY }, accesorios: { ...EMPTY },
   })
 
+  /* Sincronizar con filtro de la barra */
   useEffect(() => {
     if (activeAnimal && activeAnimal !== 'all') setExpanded(activeAnimal as AnimalCategory)
   }, [activeAnimal])
 
+  /* GSAP scroll animation — igual al original */
   useEffect(() => {
     import('gsap').then(async ({ gsap }) => {
       const { ScrollTrigger } = await import('gsap/ScrollTrigger')
       gsap.registerPlugin(ScrollTrigger)
-      gsap.from('.as-panel-item', {
-        scrollTrigger: { trigger: '.as-panels-wrap', start: 'top 82%', once: true },
-        y: 60, opacity: 0, duration: 0.7, stagger: 0.15, ease: 'power3.out', clearProps: 'all',
+      gsap.from('.as-panel', {
+        scrollTrigger: { trigger: '.animal-selector', start: 'top 82%', once: true },
+        y: 80,
+        duration: 0.75,
+        stagger: 0.18,
+        ease: 'power3.out',
+        clearProps: 'transform', // NO 'all' — preserva el background-image inline
       })
     })
   }, [])
@@ -90,113 +85,196 @@ export default function AnimalSelector({ activeAnimal, onFilter }: Props) {
   }
 
   return (
-    <section id="categorias" className="bg-[var(--dark)]">
+    <section id="categorias" className="animal-selector" style={{ background: 'var(--dark-2)' }}>
+
       {/* Header */}
-      <div className="text-center pt-16 pb-10 px-7">
-        <div className="inline-flex items-center gap-2 bg-[var(--primary)]/15 text-[var(--primary-light)] border border-[var(--primary)]/20 px-[18px] py-2 rounded-full text-[.74rem] font-bold uppercase tracking-[1.5px] mb-4">
+      <div style={{ textAlign: 'center', padding: '70px 28px 50px' }}>
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: '8px',
+          background: 'rgba(255,107,53,.12)', color: 'var(--primary-light)',
+          border: '1px solid rgba(255,107,53,.2)', padding: '8px 18px',
+          borderRadius: '50px', fontSize: '.74rem', fontWeight: 700,
+          textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '16px',
+        }}>
           <i className="fas fa-paw" /> Buscá por mascota
         </div>
-        <h2 className="text-[clamp(1.8rem,2.8vw,2.7rem)] font-black text-white mb-3">¿Para quién es el alimento?</h2>
-        <p className="text-white/50 text-[.96rem] max-w-[540px] mx-auto leading-relaxed">
+        <h2 style={{ fontSize: 'clamp(1.8rem,2.8vw,2.7rem)', fontWeight: 900, color: '#fff', marginBottom: '12px' }}>
+          ¿Para quién es el alimento?
+        </h2>
+        <p style={{ color: 'rgba(255,255,255,.55)', fontSize: '.96rem', maxWidth: '540px', margin: '0 auto', lineHeight: 1.7 }}>
           Seleccioná la categoría, ajustá los filtros y encontrá el producto ideal para tu animal.
         </p>
       </div>
 
       {/* Panels */}
-      <div className="as-panels-wrap flex flex-col md:flex-row min-h-[540px]">
+      <div className="as-panels" style={{ display: 'flex', minHeight: '580px' }}>
         {PANELS.map(panel => {
           const isActive = expanded === panel.animal
 
           return (
             <div
               key={panel.animal}
-              onClick={() => setExpanded(panel.animal)}
-              className="as-panel-item relative flex-shrink-0 overflow-hidden cursor-pointer transition-all duration-500"
+              className="as-panel"
+              onClick={() => !isActive && setExpanded(panel.animal)}
               style={{
-                flex: isActive ? '3 1 0' : '1 1 0',
-                minHeight: isActive ? '520px' : '90px',
+                position: 'relative',
+                backgroundImage: `url('${panel.bg}')`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                cursor: isActive ? 'default' : 'pointer',
+                overflow: 'hidden',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flex: isActive ? '2.2' : '0.9',
+                filter: isActive ? 'none' : 'saturate(.25) brightness(.75)',
+                transition: 'flex .55s cubic-bezier(.4,0,.2,1), filter .55s ease',
               }}
             >
-              {/* Background image con filtro CSS */}
-              <div
-                className="absolute inset-0 transition-all duration-700"
-                style={{
-                  backgroundImage: `url('${panel.bg}')`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  filter: isActive
-                    ? 'brightness(0.88) saturate(1.35) contrast(1.08)'
-                    : 'brightness(0.55) saturate(0) contrast(1.1)',
-                  transform: isActive ? 'scale(1.04)' : 'scale(1)',
-                  transition: 'filter 0.6s ease, transform 0.7s ease',
-                }}
-              />
+              {/* Color overlay */}
+              <div style={{
+                position: 'absolute', inset: 0,
+                background: isActive ? panel.overlay : 'rgba(10,10,20,.55)',
+                transition: 'background .5s ease',
+              }} />
 
-              {/* Gradient overlay por categoría */}
-              <div className={`absolute inset-0 transition-all duration-500 ${isActive ? panel.overlayActive : panel.overlayInactive}`} />
-
-              {/* Borde luminoso en el top cuando está activo */}
-              {isActive && (
-                <div
-                  className="absolute top-0 left-0 right-0 h-[3px] transition-all duration-500"
-                  style={{ background: `linear-gradient(90deg, transparent, ${panel.accentColor}, transparent)` }}
-                />
-              )}
+              {/* Bottom fade */}
+              <div style={{
+                position: 'absolute', bottom: 0, left: 0, right: 0, height: '120px',
+                background: 'linear-gradient(to top,rgba(0,0,0,.5),transparent)',
+                pointerEvents: 'none',
+              }} />
 
               {/* Content */}
-              <div className="relative z-10 h-full flex flex-col justify-end p-6 md:p-10 transition-all duration-300">
-
-                {/* Collapsed: label vertical */}
+              <div
+                onClick={e => isActive && e.stopPropagation()}
+                style={{
+                  position: 'relative', zIndex: 2,
+                  display: 'flex', flexDirection: 'column',
+                  alignItems: isActive ? 'flex-start' : 'center',
+                  padding: '48px 40px',
+                  width: '100%', maxWidth: '380px',
+                  opacity: isActive ? 1 : 0.55,
+                  transform: isActive ? 'scale(1)' : 'scale(.95)',
+                  transition: 'opacity .4s ease, transform .4s ease',
+                }}
+              >
+                {/* Emoji — solo en inactivo */}
                 {!isActive && (
-                  <div className="flex items-center gap-3 md:flex-col md:gap-2">
-                    <span className="text-3xl drop-shadow-lg">{panel.emoji}</span>
-                    <h3 className="text-white font-black text-[1.4rem] md:text-[1.1rem] tracking-wider drop-shadow-lg">{panel.label}</h3>
-                  </div>
+                  <span style={{ fontSize: '2.8rem', marginBottom: '12px', display: 'block' }}>
+                    {panel.emoji}
+                  </span>
                 )}
 
-                {/* Expanded: form */}
+                {/* Checkbox + label */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '14px' }}>
+                  <div style={{
+                    width: '28px', height: '28px',
+                    border: isActive ? '2.5px solid #fff' : '2.5px solid rgba(255,255,255,.7)',
+                    borderRadius: '4px',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    background: isActive ? 'rgba(255,255,255,.2)' : 'transparent',
+                    transition: 'all .3s ease', flexShrink: 0,
+                  }}>
+                    <i className="fas fa-check" style={{
+                      color: '#fff', fontSize: '.85rem',
+                      opacity: isActive ? 1 : 0,
+                      transform: isActive ? 'scale(1)' : 'scale(0)',
+                      transition: 'opacity .25s ease, transform .3s cubic-bezier(.34,1.56,.64,1)',
+                    }} />
+                  </div>
+                  <div>
+                    {isActive && (
+                      <span style={{
+                        display: 'block', fontFamily: "'Fredoka One', sans-serif",
+                        fontSize: '.85rem', letterSpacing: '5px', textTransform: 'uppercase',
+                        opacity: .75, marginBottom: '5px', color: '#fff', lineHeight: 1,
+                      }}>
+                        RUPER
+                      </span>
+                    )}
+                    <h3 style={{
+                      fontSize: isActive ? '2.4rem' : '1.2rem',
+                      fontWeight: 900, color: '#fff',
+                      letterSpacing: '4px', textTransform: 'uppercase',
+                      textShadow: '0 2px 12px rgba(0,0,0,.25)',
+                      lineHeight: 1.1, margin: 0,
+                      transition: 'font-size .4s ease',
+                    }}>
+                      {panel.label}
+                    </h3>
+                  </div>
+                </div>
+
+                {/* Filtros — solo en activo */}
                 {isActive && (
-                  <div onClick={e => e.stopPropagation()} className="w-full max-w-[400px]">
-                    <span className="text-5xl mb-3 block drop-shadow-xl">{panel.emoji}</span>
-                    <div className="flex items-center gap-3 mb-6">
-                      <div
-                        className="w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0"
-                        style={{ borderColor: panel.accentColor }}
-                      >
-                        <i className="fas fa-check text-[.6rem]" style={{ color: panel.accentColor }} />
-                      </div>
-                      <h3 className="text-white font-black text-[2rem] tracking-wider drop-shadow-lg">
-                        <span className="text-[.9rem] font-black mr-1" style={{ color: panel.accentColor }}>RUPER</span>
-                        {panel.label}
-                      </h3>
-                    </div>
-
-                    <div className="flex flex-col gap-3 mb-5">
-                      {panel.filters.map(f => (
-                        <div key={f.key}>
-                          <label className="text-white/70 text-[.72rem] font-semibold uppercase tracking-wide block mb-1.5">{f.label}:</label>
-                          <div className="relative">
-                            <select
-                              value={selects[panel.animal][f.key]}
-                              onChange={e => setSelect(panel.animal, f.key, e.target.value)}
-                              className="w-full bg-black/30 backdrop-blur-sm border border-white/20 text-white rounded-xl px-4 py-3 text-[.88rem] font-medium appearance-none focus:outline-none transition-colors"
-                              style={{ ['--tw-ring-color' as string]: panel.accentColor }}
-                            >
-                              <option value="" className="text-[var(--dark)]">Seleccionar</option>
-                              {f.options.map(o => (
-                                <option key={o.v} value={o.v} className="text-[var(--dark)]">{o.l}</option>
-                              ))}
-                            </select>
-                            <i className="fas fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-white/50 text-xs pointer-events-none" />
-                          </div>
+                  <div style={{
+                    display: 'flex', flexDirection: 'column', gap: '14px',
+                    marginTop: '24px', width: '100%',
+                    animation: 'fadeUp .35s ease .15s both',
+                  }}>
+                    {panel.filters.map(f => (
+                      <div key={f.key}>
+                        <label style={{
+                          display: 'block', color: 'rgba(255,255,255,.82)',
+                          fontSize: '.76rem', fontWeight: 600, letterSpacing: '.5px',
+                          marginBottom: '6px', textTransform: 'uppercase',
+                        }}>
+                          {f.label}:
+                        </label>
+                        <div style={{ position: 'relative' }}>
+                          <select
+                            value={selects[panel.animal][f.key]}
+                            onChange={e => setSelect(panel.animal, f.key, e.target.value)}
+                            style={{
+                              width: '100%',
+                              background: 'rgba(255,255,255,.12)',
+                              border: '1.5px solid rgba(255,255,255,.25)',
+                              borderRadius: '50px',
+                              padding: '11px 42px 11px 18px',
+                              color: '#fff',
+                              fontSize: '.82rem', fontWeight: 500,
+                              appearance: 'none', WebkitAppearance: 'none',
+                              cursor: 'pointer',
+                              outline: 'none',
+                            }}
+                          >
+                            <option value="" style={{ background: '#1B1B2F', color: '#fff' }}>Seleccionar</option>
+                            {f.options.map(o => (
+                              <option key={o.v} value={o.v} style={{ background: '#1B1B2F', color: '#fff' }}>{o.l}</option>
+                            ))}
+                          </select>
+                          <i className="fas fa-chevron-down" style={{
+                            position: 'absolute', right: '16px', top: '50%',
+                            transform: 'translateY(-50%)',
+                            color: 'rgba(255,255,255,.6)', fontSize: '.75rem',
+                            pointerEvents: 'none',
+                          }} />
                         </div>
-                      ))}
-                    </div>
+                      </div>
+                    ))}
 
+                    {/* Botón */}
                     <button
                       onClick={() => handleVerProductos(panel.animal)}
-                      className="w-full text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2.5 transition-all hover:-translate-y-0.5 hover:shadow-lg text-[.96rem]"
-                      style={{ background: `linear-gradient(135deg, ${panel.accentColor}, ${panel.accentColor}cc)` }}
+                      style={{
+                        background: '#fff', color: 'var(--dark)',
+                        border: 'none', borderRadius: '50px',
+                        padding: '14px 28px',
+                        fontSize: '.9rem', fontWeight: 700,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
+                        cursor: 'pointer', marginTop: '6px',
+                        boxShadow: '0 4px 20px rgba(0,0,0,.18)',
+                        width: '100%', transition: 'all .3s ease',
+                      }}
+                      onMouseEnter={e => {
+                        (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-3px)'
+                        ;(e.currentTarget as HTMLButtonElement).style.boxShadow = '0 8px 28px rgba(0,0,0,.25)'
+                      }}
+                      onMouseLeave={e => {
+                        (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(0)'
+                        ;(e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 20px rgba(0,0,0,.18)'
+                      }}
                     >
                       Ver Productos <i className="fas fa-arrow-right" />
                     </button>
