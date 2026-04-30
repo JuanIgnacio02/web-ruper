@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="RUPER Alimentos Balanceados">
+  <defs>
+    <style>
+      .rt { font-family: 'Fredoka One', 'Arial Rounded MT Bold', 'Nunito', sans-serif; }
+    </style>
+  </defs>
+
+  <!-- Fondo transparente — sin círculo blanco -->
+
+  <!-- Anillo naranja -->
+  <circle cx="100" cy="100" r="93" fill="none" stroke="#F26522" stroke-width="8"/>
+
+  <!-- Almohadilla central: más ancha y baja, forma de riñón con rx > ry -->
+  <ellipse cx="100" cy="121" rx="35" ry="26" fill="#F26522"/>
+
+  <!-- Pequeño bulto superior para dar forma de corazón a la almohadilla -->
+  <ellipse cx="86"  cy="110" rx="18" ry="14" fill="#F26522"/>
+  <ellipse cx="114" cy="110" rx="18" ry="14" fill="#F26522"/>
+
+  <!-- Dedo exterior izquierdo -->
+  <ellipse cx="59" cy="92" rx="12.5" ry="17" fill="#F26522"
+           transform="rotate(-30 59 92)"/>
+
+  <!-- Dedo interior izquierdo -->
+  <ellipse cx="81" cy="75" rx="12.5" ry="17" fill="#F26522"
+           transform="rotate(-10 81 75)"/>
+
+  <!-- Dedo interior derecho -->
+  <ellipse cx="119" cy="75" rx="12.5" ry="17" fill="#F26522"
+           transform="rotate(10 119 75)"/>
+
+  <!-- Dedo exterior derecho -->
+  <ellipse cx="141" cy="92" rx="12.5" ry="17" fill="#F26522"
+           transform="rotate(30 141 92)"/>
+
+  <!-- Texto "ruper" -->
+  <text x="100" y="170"
+        text-anchor="middle"
+        class="rt"
+        font-family="'Fredoka One','Arial Rounded MT Bold','Nunito',sans-serif"
+        font-size="30"
+        font-weight="400"
+        fill="#F26522"
+        letter-spacing="4">ruper</text>
+</svg>

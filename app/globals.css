@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+/* ── RUPER design tokens ── */
+:root {
+  --primary:        #FF6B35;
+  --primary-dark:   #D95A28;
+  --primary-light:  #FF8F5E;
+  --secondary:      #2D6A4F;
+  --accent:         #FFB703;
+  --dark:           #1B1B2F;
+  --dark-2:         #2B2B42;
+  --gray:           #6B7280;
+  --light:          #F9FAFB;
+  --border:         #E5E7EB;
+  --white:          #FFFFFF;
+  --shadow-sm:      0 2px 8px rgba(0,0,0,.06);
+  --shadow:         0 4px 20px rgba(0,0,0,.08);
+  --shadow-lg:      0 12px 40px rgba(0,0,0,.14);
+  --radius:         18px;
+  --radius-sm:      10px;
+  --t:              all .3s ease;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html  { scroll-behavior: smooth; }
+body  { font-family: var(--font-poppins, Poppins, sans-serif); color: var(--dark); background: var(--white); overflow-x: hidden; }
+a     { text-decoration: none; color: inherit; }
+img   { max-width: 100%; display: block; }
+button{ cursor: pointer; border: none; outline: none; font-family: inherit; }
+ul    { list-style: none; }
+
+/* ── Keyframes ── */
+@keyframes shapeFloat {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33%     { transform: translate(25px,-25px) scale(1.04); }
+  66%     { transform: translate(-15px,20px) scale(.97); }
+}
+@keyframes pawRise {
+  0%      { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+  8%,92%  { opacity: .055; }
+  100%    { transform: translateY(-120px) rotate(360deg); opacity: 0; }
+}
+@keyframes floatY   { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+@keyframes waPulse  {
+  0%,100% { box-shadow: 0 4px 20px rgba(37,211,102,.4); }
+  50%     { box-shadow: 0 4px 40px rgba(37,211,102,.7), 0 0 0 12px rgba(37,211,102,.08); }
+}
+@keyframes toastIn  { from{opacity:0;transform:translateX(40px)} to{opacity:1;transform:translateX(0)} }
+@keyframes toastOut { to{opacity:0;transform:translateX(40px)} }
+@keyframes ldBar    { from{width:0} to{width:100%} }
+
+/* ── Product bg gradients ── */
+.bg-dogs        { background: linear-gradient(135deg, #fff3ee, #ffe0d0); }
+.bg-cats        { background: linear-gradient(135deg, #f3eeff, #e0d0ff); }
+.bg-farm        { background: linear-gradient(135deg, #eefff3, #d0f0d8); }
+.bg-birds       { background: linear-gradient(135deg, #fffbee, #fff0c0); }
+.bg-fish        { background: linear-gradient(135deg, #eef8ff, #d0e8ff); }
+.bg-accessories { background: linear-gradient(135deg, #fff0fa, #f5d0ff); }
+
+/* ── Badges ── */
+.badge-new  { background: #2D6A4F; color: #fff; }
+.badge-sale { background: #FF6B35; color: #fff; }
+.badge-top  { background: #FFB703; color: #1B1B2F; }
+
+/* ── Accesibilidad ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
