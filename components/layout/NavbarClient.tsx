@@ -2,19 +2,26 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import { useCart } from '@/hooks/useCart'
 import MobileMenu from './MobileMenu'
 
 export default function NavbarClient() {
-  const [scrolled, setScrolled] = useState(false)
+  const pathname  = usePathname()
+  const isHome    = pathname === '/'
+  // Non-home pages always show solid navbar; home starts transparent
+  const [scrolled, setScrolled] = useState(!isHome)
   const [menuOpen, setMenuOpen] = useState(false)
   const { count, open: openCart } = useCart()
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+    // On route change, re-evaluate
+    if (!isHome) { setScrolled(true); return }
+    const check  = () => setScrolled(window.scrollY > 50)
+    check()
+    window.addEventListener('scroll', check, { passive: true })
+    return () => window.removeEventListener('scroll', check)
+  }, [isHome])
 
   return (
     <>

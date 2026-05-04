@@ -7,6 +7,27 @@ import { useCart } from '@/hooks/useCart'
 import { useToast } from '@/hooks/useToast'
 import { formatPrice } from '@/lib/utils'
 
+const CAT_GRADIENTS: Record<string, string> = {
+  perros:      'linear-gradient(135deg,#fff3ee,#ffe0d0)',
+  gatos:       'linear-gradient(135deg,#f3eeff,#e0d0ff)',
+  granja:      'linear-gradient(135deg,#eefff3,#d0f0d8)',
+  aves:        'linear-gradient(135deg,#fffbee,#fff0c0)',
+  peces:       'linear-gradient(135deg,#eef8ff,#d0e8ff)',
+  accesorios:  'linear-gradient(135deg,#fff0fa,#f5d0ff)',
+  'pequeños':  'linear-gradient(135deg,#eefff3,#c8f0d8)',
+}
+
+const BG_CLASS_MAP: Record<string, string> = {
+  'bg-dogs':        'linear-gradient(135deg,#fff3ee,#ffe0d0)',
+  'bg-cats':        'linear-gradient(135deg,#f3eeff,#e0d0ff)',
+  'bg-farm':        'linear-gradient(135deg,#eefff3,#d0f0d8)',
+  'bg-birds':       'linear-gradient(135deg,#fffbee,#fff0c0)',
+  'bg-fish':        'linear-gradient(135deg,#eef8ff,#d0e8ff)',
+  'bg-accessories': 'linear-gradient(135deg,#fff0fa,#f5d0ff)',
+  'bg-small':       'linear-gradient(135deg,#eefff3,#c8f0d8)',
+  'bg-acc':         'linear-gradient(135deg,#f5f5f5,#e8e8e8)',
+}
+
 export default function ProductDetail({ product: p }: { product: Product }) {
   const { add } = useCart()
   const { showToast } = useToast()
@@ -74,9 +95,13 @@ export default function ProductDetail({ product: p }: { product: Product }) {
 
             {/* ─── Imagen ─── */}
             <div
-              className={`pd-img-wrap relative ${p.bg_class} flex items-center justify-center cursor-zoom-in transition-all`}
-              style={{ minHeight: 420, padding: '56px 48px' }}
-              onClick={() => p.img && setImgZoom(true)}
+              className="pd-img-wrap relative flex items-center justify-center cursor-zoom-in transition-all"
+              style={{
+                minHeight: 420,
+                padding: '56px 48px',
+                background: BG_CLASS_MAP[p.bg_class ?? ''] ?? CAT_GRADIENTS[p.category] ?? 'linear-gradient(135deg,#fff3ee,#ffe0d0)',
+              }}
+              onClick={() => p.img && !imgError && setImgZoom(true)}
             >
               {/* Badge */}
               {p.badge && (

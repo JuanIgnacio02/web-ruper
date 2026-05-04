@@ -7,6 +7,25 @@ import { useCart } from '@/hooks/useCart'
 import { useToast } from '@/hooks/useToast'
 import { formatPrice } from '@/lib/utils'
 
+const BG_MAP: Record<string, string> = {
+  'bg-dogs':        'linear-gradient(135deg,#fff3ee,#ffe0d0)',
+  'bg-cats':        'linear-gradient(135deg,#f3eeff,#e0d0ff)',
+  'bg-farm':        'linear-gradient(135deg,#eefff3,#d0f0d8)',
+  'bg-birds':       'linear-gradient(135deg,#fffbee,#fff0c0)',
+  'bg-fish':        'linear-gradient(135deg,#eef8ff,#d0e8ff)',
+  'bg-accessories': 'linear-gradient(135deg,#fff0fa,#f5d0ff)',
+  'bg-small':       'linear-gradient(135deg,#eefff3,#c8f0d8)',
+  'bg-acc':         'linear-gradient(135deg,#f5f5f5,#e8e8e8)',
+}
+const CAT_BG: Record<string, string> = {
+  perros: 'linear-gradient(135deg,#fff3ee,#ffe0d0)',
+  gatos:  'linear-gradient(135deg,#f3eeff,#e0d0ff)',
+  granja: 'linear-gradient(135deg,#eefff3,#d0f0d8)',
+  aves:   'linear-gradient(135deg,#fffbee,#fff0c0)',
+  peces:  'linear-gradient(135deg,#eef8ff,#d0e8ff)',
+  accesorios: 'linear-gradient(135deg,#fff0fa,#f5d0ff)',
+}
+
 export default function ProductCard({ product: p }: { product: Product }) {
   const { add } = useCart()
   const { showToast } = useToast()
@@ -34,7 +53,10 @@ export default function ProductCard({ product: p }: { product: Product }) {
       )}
 
       {/* Imagen */}
-      <div className={`${p.bg_class} h-[210px] flex items-center justify-center overflow-hidden`}>
+      <div
+        className="h-[210px] flex items-center justify-center overflow-hidden"
+        style={{ background: BG_MAP[p.bg_class ?? ''] ?? CAT_BG[p.category] ?? 'linear-gradient(135deg,#fff3ee,#ffe0d0)' }}
+      >
         {p.img ? (
           <Image
             src={p.img}
