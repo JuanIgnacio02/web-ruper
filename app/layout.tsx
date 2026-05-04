@@ -9,6 +9,7 @@ import CartDrawer        from '@/components/cart/CartDrawer'
 import WaFloat           from '@/components/ui/WaFloat'
 import ScrollTopButton   from '@/components/ui/ScrollTopButton'
 import Loader            from '@/components/ui/Loader'
+import MobileBottomNav   from '@/components/layout/MobileBottomNav'
 
 const poppins = Poppins({
   subsets:  ['latin'],
@@ -74,6 +75,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <CartDrawer />
             <WaFloat />
             <ScrollTopButton />
+            <MobileBottomNav />
           </ToastProvider>
         </CartProvider>
       </body>

@@ -85,6 +85,32 @@
   user-select: none;
 }
 
+/* ── Mobile bottom nav spacing ── */
+@media (max-width: 767px) {
+  /* Reserve space for the bottom nav (≈60px + safe area) */
+  body { padding-bottom: calc(60px + env(safe-area-inset-bottom)); }
+
+  /* Momentum scrolling on iOS */
+  .overflow-x-auto,
+  [data-scroll-x]           { -webkit-overflow-scrolling: touch; }
+
+  /* Slightly tighter section padding on small screens */
+  section                   { padding-block: 52px !important; }
+
+  /* Touch callout off on images */
+  img                       { -webkit-touch-callout: none; }
+}
+
+/* ── Safe-area viewport ── */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+}
+
+/* ── Micro-interaction: card tap feedback ── */
+@media (hover: none) {
+  .prod-card-anim:active { transform: scale(0.97); }
+}
+
 /* ── Accesibilidad ── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }

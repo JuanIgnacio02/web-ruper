@@ -34,6 +34,14 @@ export default function ProductDetail({ product: p }: { product: Product }) {
   const [qty,      setQty]      = useState(1)
   const [imgZoom,  setImgZoom]  = useState(false)
   const [imgError, setImgError] = useState(false)
+  const [stickyVisible, setStickyVisible] = useState(false)
+
+  /* Show sticky ATC bar after scrolling past the main button (mobile) */
+  useEffect(() => {
+    const onScroll = () => setStickyVisible(window.scrollY > 320)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   /* ── GSAP entrance ── */
   useEffect(() => {
@@ -74,11 +82,11 @@ export default function ProductDetail({ product: p }: { product: Product }) {
   ].filter(Boolean) as { icon: string; label: string; value: string }[]
 
   return (
-    <div className="min-h-screen pt-24 pb-20" style={{ background: 'var(--light)' }}>
-      <div className="max-w-[1160px] mx-auto px-7">
+    <div className="min-h-screen pt-[72px] md:pt-24 pb-[100px] md:pb-20" style={{ background: 'var(--light)' }}>
+      <div className="max-w-[1160px] mx-auto px-4 md:px-7">
 
         {/* Breadcrumb */}
-        <nav className="pd-breadcrumb flex items-center gap-2 text-[.78rem] text-[var(--gray)] mb-10 flex-wrap">
+        <nav className="pd-breadcrumb flex items-center gap-2 text-[.75rem] text-[var(--gray)] mb-5 md:mb-10 flex-wrap">
           <Link href="/" className="hover:text-[var(--primary)] transition-colors flex items-center gap-1">
             <i className="fas fa-home text-[.7rem]" /> Inicio
           </Link>
@@ -90,14 +98,14 @@ export default function ProductDetail({ product: p }: { product: Product }) {
 
         {/* Main card */}
         <div className="bg-white rounded-[24px] overflow-hidden" style={{ boxShadow: 'var(--shadow-lg)' }}>
-          <div className="grid grid-cols-1 md:grid-cols-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 md:min-h-[520px]">
 
             {/* ─── Imagen ─── */}
             <div
               className="pd-img-wrap relative flex items-center justify-center cursor-zoom-in transition-all"
               style={{
-                minHeight: 420,
-                padding: '56px 48px',
+                minHeight: 260,
+                padding: '36px 28px',
                 background: BG_CLASS_MAP[p.bg_class ?? ''] ?? CAT_GRADIENTS[p.category] ?? 'linear-gradient(135deg,#fff3ee,#ffe0d0)',
               }}
               onClick={() => p.img && !imgError && setImgZoom(true)}
@@ -309,6 +317,91 @@ export default function ProductDetail({ product: p }: { product: Product }) {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* ── Sticky mobile ATC bar ── */}
+      <div
+        className="md:hidden fixed bottom-0 left-0 right-0 z-[996]"
+        style={{
+          background:    'rgba(255,255,255,0.98)',
+          backdropFilter:'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          borderTop:     '1px solid var(--border)',
+          padding:       '10px 16px',
+          paddingBottom: 'calc(10px + env(safe-area-inset-bottom))',
+          transform:     stickyVisible ? 'translateY(0)' : 'translateY(105%)',
+          transition:    'transform 0.3s cubic-bezier(0.32,0.72,0,1)',
+          boxShadow:     '0 -4px 20px rgba(0,0,0,0.08)',
+        }}
+      >
+        <div className="flex items-center gap-3">
+          {/* Qty */}
+          <div
+            className="flex items-center gap-2 rounded-[12px] px-2.5 py-2 flex-shrink-0"
+            style={{ background: 'var(--light)', border: '1px solid var(--border)' }}
+          >
+            <button
+              onClick={() => setQty(q => Math.max(1, q - 1))}
+              className="w-8 h-8 rounded-[8px] flex items-center justify-center text-[.8rem] transition-all active:scale-90"
+              style={{ background: 'white', color: 'var(--dark)', boxShadow: '0 1px 4px rgba(0,0,0,.08)' }}
+            >
+              <i className="fas fa-minus" />
+            </button>
+            <span className="font-bold min-w-[18px] text-center text-[.9rem]" style={{ color: 'var(--dark)' }}>{qty}</span>
+            <button
+              onClick={() => setQty(q => q + 1)}
+              className="w-8 h-8 rounded-[8px] flex items-center justify-center text-[.8rem] transition-all active:scale-90"
+              style={{ background: 'white', color: 'var(--dark)', boxShadow: '0 1px 4px rgba(0,0,0,.08)' }}
+            >
+              <i className="fas fa-plus" />
+            </button>
+          </div>
+
+          {/* ATC button */}
+          <button
+            onClick={handleAdd}
+            disabled={!p.stock}
+            className="flex-1 flex items-center justify-center gap-2 rounded-[14px] font-bold text-white transition-all active:scale-[.97] border-none"
+            style={{
+              height:    50,
+              fontSize:  '0.9rem',
+              background: added
+                ? 'linear-gradient(135deg,#4CAF50,#388E3C)'
+                : p.stock
+                  ? 'linear-gradient(135deg,var(--primary),var(--primary-dark))'
+                  : 'var(--border)',
+              color:     added || p.stock ? '#fff' : 'var(--gray)',
+              boxShadow: added
+                ? '0 4px 16px rgba(76,175,80,.35)'
+                : p.stock
+                  ? '0 4px 16px rgba(255,107,53,.38)'
+                  : 'none',
+              cursor:    !p.stock ? 'not-allowed' : 'pointer',
+            }}
+          >
+            <i className={`fas ${added ? 'fa-check' : 'fa-shopping-cart'} text-[0.85rem]`} />
+            {added ? '¡Agregado!' : p.stock ? `Agregar${qty > 1 ? ` ×${qty}` : ''}` : 'Sin stock'}
+          </button>
+
+          {/* WA quick button */}
+          <a
+            href={`https://wa.me/2604123456?text=${encodeURIComponent(`Hola RUPER! Me interesa: *${p.name}*${p.weight ? ` (${p.weight})` : ''} — $${p.price.toLocaleString('es-AR')} 🐾`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center rounded-[14px] flex-shrink-0 transition-all active:scale-90"
+            style={{
+              width:      50,
+              height:     50,
+              background: 'linear-gradient(135deg,#25D366,#128C7E)',
+              color:      '#fff',
+              fontSize:   '1.15rem',
+              boxShadow:  '0 4px 14px rgba(37,211,102,.3)',
+            }}
+            aria-label="Consultar por WhatsApp"
+          >
+            <i className="fab fa-whatsapp" />
+          </a>
         </div>
       </div>
 
