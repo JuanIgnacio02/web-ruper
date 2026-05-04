@@ -16,6 +16,7 @@ const PANELS = [
     emoji:   '🐶',
     bg:      'https://images.unsplash.com/photo-1552053831-71594a27632d?w=900&q=80&fit=crop',
     overlay: 'linear-gradient(160deg,rgba(255,107,53,.72) 0%,rgba(217,90,40,.60) 100%)',
+    overlayInactive: 'rgba(10,10,20,.55)',
     filters: [
       { key: 'raza'  as keyof ProductFilters, label: 'Tamaño de Raza',   options: [{ v: 'pequeña', l: 'Pequeñas' },    { v: 'mediana', l: 'Medianas' },      { v: 'grande', l: 'Grandes' }] },
       { key: 'etapa' as keyof ProductFilters, label: 'Etapa de vida',    options: [{ v: 'cachorro', l: 'Cachorros' },   { v: 'adulto',  l: 'Adultos' },       { v: 'senior', l: 'Senior' }] },
@@ -28,6 +29,7 @@ const PANELS = [
     emoji:   '🐱',
     bg:      'https://images.unsplash.com/photo-1533743983669-94fa5c4338ec?w=900&q=80&fit=crop',
     overlay: 'linear-gradient(160deg,rgba(124,58,237,.72) 0%,rgba(91,33,182,.60) 100%)',
+    overlayInactive: 'rgba(10,10,20,.55)',
     filters: [
       { key: 'raza'  as keyof ProductFilters, label: 'Tipo de gato',    options: [{ v: 'interior', l: 'Interior' },   { v: 'exterior', l: 'Exterior' },     { v: 'castrado', l: 'Castrado' }] },
       { key: 'etapa' as keyof ProductFilters, label: 'Etapa de vida',   options: [{ v: 'cachorro', l: 'Gatito' },     { v: 'adulto',   l: 'Adulto' },       { v: 'senior',   l: 'Senior' }] },
@@ -40,6 +42,7 @@ const PANELS = [
     emoji:   '🐄',
     bg:      'https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=900&q=80&fit=crop',
     overlay: 'linear-gradient(160deg,rgba(45,106,79,.72) 0%,rgba(29,74,54,.60) 100%)',
+    overlayInactive: 'rgba(10,10,20,.55)',
     filters: [
       { key: 'raza'  as keyof ProductFilters, label: 'Especie',            options: [{ v: 'equinos', l: 'Equinos' }, { v: 'bovinos', l: 'Bovinos' }, { v: 'porcinos', l: 'Porcinos' }, { v: 'ovinos', l: 'Ovinos' }, { v: 'aves', l: 'Aves de corral' }] },
       { key: 'etapa' as keyof ProductFilters, label: 'Etapa / Propósito',  options: [{ v: 'crecimiento', l: 'Crecimiento' }, { v: 'mantenimiento', l: 'Mantenimiento' }, { v: 'postura', l: 'Postura / Producción' }] },
@@ -50,17 +53,26 @@ const PANELS = [
 
 export default function AnimalSelector({ activeAnimal, onFilter }: Props) {
   const [expanded, setExpanded] = useState<AnimalCategory>('perros')
+  const [isMobile, setIsMobile] = useState(false)
   const [selects, setSelects]   = useState<Record<AnimalCategory, ProductFilters>>({
     perros: { ...EMPTY }, gatos: { ...EMPTY }, granja: { ...EMPTY },
     aves: { ...EMPTY }, 'pequeños': { ...EMPTY }, peces: { ...EMPTY }, accesorios: { ...EMPTY },
   })
 
-  /* Sincronizar con filtro de la barra */
+  /* Detect mobile */
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check, { passive: true })
+    return () => window.removeEventListener('resize', check)
+  }, [])
+
+  /* Sync with filter bar */
   useEffect(() => {
     if (activeAnimal && activeAnimal !== 'all') setExpanded(activeAnimal as AnimalCategory)
   }, [activeAnimal])
 
-  /* GSAP scroll animation — igual al original */
+  /* GSAP scroll animation */
   useEffect(() => {
     import('gsap').then(async ({ gsap }) => {
       const { ScrollTrigger } = await import('gsap/ScrollTrigger')
@@ -71,7 +83,7 @@ export default function AnimalSelector({ activeAnimal, onFilter }: Props) {
         duration: 0.75,
         stagger: 0.18,
         ease: 'power3.out',
-        clearProps: 'transform', // NO 'all' — preserva el background-image inline
+        clearProps: 'transform',
       })
     })
   }, [])
@@ -84,6 +96,211 @@ export default function AnimalSelector({ activeAnimal, onFilter }: Props) {
     document.getElementById('productos')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
+  /* ─── Mobile accordion ─────────────────────────────────────────── */
+  if (isMobile) {
+    return (
+      <section id="categorias" className="animal-selector" style={{ background: 'var(--dark-2)' }}>
+
+        {/* Header */}
+        <div style={{ textAlign: 'center', padding: '52px 20px 36px' }}>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: '8px',
+            background: 'rgba(255,107,53,.12)', color: 'var(--primary-light)',
+            border: '1px solid rgba(255,107,53,.2)', padding: '7px 16px',
+            borderRadius: '50px', fontSize: '.7rem', fontWeight: 700,
+            textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '14px',
+          }}>
+            <i className="fas fa-paw" /> Buscá por mascota
+          </div>
+          <h2 style={{ fontSize: '1.65rem', fontWeight: 900, color: '#fff', marginBottom: '10px', lineHeight: 1.2 }}>
+            ¿Para quién es el alimento?
+          </h2>
+          <p style={{ color: 'rgba(255,255,255,.5)', fontSize: '.875rem', lineHeight: 1.65, maxWidth: 320, margin: '0 auto' }}>
+            Tocá la categoría y encontrá el producto ideal.
+          </p>
+        </div>
+
+        {/* Accordion cards */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, padding: '0 14px 48px' }}>
+          {PANELS.map(panel => {
+            const isActive = expanded === panel.animal
+
+            return (
+              <div
+                key={panel.animal}
+                className="as-panel"
+                style={{
+                  borderRadius: 20,
+                  overflow: 'hidden',
+                  position: 'relative',
+                  transition: 'box-shadow 0.3s ease',
+                  boxShadow: isActive ? '0 12px 40px rgba(0,0,0,.45)' : '0 4px 16px rgba(0,0,0,.25)',
+                }}
+              >
+                {/* Header row — always visible, tap to toggle */}
+                <button
+                  onClick={() => setExpanded(isActive ? panel.animal : panel.animal)}
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 14,
+                    padding: '0 18px',
+                    height: 72,
+                    position: 'relative',
+                    overflow: 'hidden',
+                    border: 'none',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                    backgroundImage: `url('${panel.bg}')`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                  }}
+                  aria-expanded={isActive}
+                >
+                  {/* Overlay */}
+                  <div style={{
+                    position: 'absolute', inset: 0,
+                    background: isActive ? panel.overlay : 'rgba(10,10,20,.62)',
+                    transition: 'background 0.4s ease',
+                  }} />
+
+                  {/* Emoji */}
+                  <span style={{
+                    fontSize: '2rem',
+                    position: 'relative', zIndex: 1,
+                    lineHeight: 1,
+                    flexShrink: 0,
+                    filter: isActive ? 'none' : 'saturate(.4)',
+                    transition: 'filter 0.4s ease',
+                  }}>
+                    {panel.emoji}
+                  </span>
+
+                  {/* Label */}
+                  <span style={{
+                    flex: 1,
+                    position: 'relative', zIndex: 1,
+                    color: '#fff',
+                    fontWeight: 900,
+                    fontSize: '1.1rem',
+                    letterSpacing: '3px',
+                    textTransform: 'uppercase',
+                    textShadow: '0 2px 8px rgba(0,0,0,.3)',
+                  }}>
+                    {panel.label}
+                  </span>
+
+                  {/* Chevron */}
+                  <i
+                    className="fas fa-chevron-down"
+                    style={{
+                      position: 'relative', zIndex: 1,
+                      color: 'rgba(255,255,255,.8)',
+                      fontSize: '0.85rem',
+                      flexShrink: 0,
+                      transform: isActive ? 'rotate(180deg)' : 'rotate(0deg)',
+                      transition: 'transform 0.35s cubic-bezier(.4,0,.2,1)',
+                    }}
+                  />
+                </button>
+
+                {/* Expandable content */}
+                <div style={{
+                  maxHeight: isActive ? 600 : 0,
+                  overflow: 'hidden',
+                  transition: 'max-height 0.45s cubic-bezier(.4,0,.2,1)',
+                }}>
+                  <div style={{
+                    background: 'rgba(255,255,255,0.04)',
+                    borderTop: '1px solid rgba(255,255,255,0.08)',
+                    padding: '20px 18px 22px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 14,
+                  }}>
+                    {panel.filters.map(f => (
+                      <div key={f.key}>
+                        <label style={{
+                          display: 'block',
+                          color: 'rgba(255,255,255,.7)',
+                          fontSize: '.7rem',
+                          fontWeight: 700,
+                          letterSpacing: '.8px',
+                          marginBottom: 7,
+                          textTransform: 'uppercase',
+                        }}>
+                          {f.label}:
+                        </label>
+                        <div style={{ position: 'relative' }}>
+                          <select
+                            value={selects[panel.animal][f.key]}
+                            onChange={e => setSelect(panel.animal, f.key, e.target.value)}
+                            style={{
+                              width: '100%',
+                              background: 'rgba(255,255,255,.1)',
+                              border: '1.5px solid rgba(255,255,255,.2)',
+                              borderRadius: 14,
+                              padding: '12px 42px 12px 16px',
+                              color: '#fff',
+                              fontSize: '.85rem',
+                              fontWeight: 500,
+                              appearance: 'none',
+                              WebkitAppearance: 'none',
+                              cursor: 'pointer',
+                              outline: 'none',
+                              minHeight: 46,
+                            }}
+                          >
+                            <option value="" style={{ background: '#1B1B2F', color: '#fff' }}>Todos</option>
+                            {f.options.map(o => (
+                              <option key={o.v} value={o.v} style={{ background: '#1B1B2F', color: '#fff' }}>{o.l}</option>
+                            ))}
+                          </select>
+                          <i className="fas fa-chevron-down" style={{
+                            position: 'absolute', right: 14, top: '50%',
+                            transform: 'translateY(-50%)',
+                            color: 'rgba(255,255,255,.55)', fontSize: '.7rem',
+                            pointerEvents: 'none',
+                          }} />
+                        </div>
+                      </div>
+                    ))}
+
+                    {/* CTA */}
+                    <button
+                      onClick={() => handleVerProductos(panel.animal)}
+                      style={{
+                        background: '#fff',
+                        color: 'var(--dark)',
+                        border: 'none',
+                        borderRadius: 14,
+                        height: 50,
+                        fontSize: '.9rem',
+                        fontWeight: 700,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 10,
+                        cursor: 'pointer',
+                        marginTop: 4,
+                        boxShadow: '0 4px 16px rgba(0,0,0,.2)',
+                        width: '100%',
+                      }}
+                    >
+                      Ver Productos <i className="fas fa-arrow-right" style={{ fontSize: '.8rem' }} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </section>
+    )
+  }
+
+  /* ─── Desktop horizontal panels (unchanged) ───────────────────── */
   return (
     <section id="categorias" className="animal-selector" style={{ background: 'var(--dark-2)' }}>
 
@@ -159,14 +376,12 @@ export default function AnimalSelector({ activeAnimal, onFilter }: Props) {
                   transition: 'opacity .4s ease, transform .4s ease',
                 }}
               >
-                {/* Emoji — solo en inactivo */}
                 {!isActive && (
                   <span style={{ fontSize: '2.8rem', marginBottom: '12px', display: 'block' }}>
                     {panel.emoji}
                   </span>
                 )}
 
-                {/* Checkbox + label */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '14px' }}>
                   <div style={{
                     width: '28px', height: '28px',
@@ -206,7 +421,6 @@ export default function AnimalSelector({ activeAnimal, onFilter }: Props) {
                   </div>
                 </div>
 
-                {/* Filtros — solo en activo */}
                 {isActive && (
                   <div style={{
                     display: 'flex', flexDirection: 'column', gap: '14px',
@@ -254,7 +468,6 @@ export default function AnimalSelector({ activeAnimal, onFilter }: Props) {
                       </div>
                     ))}
 
-                    {/* Botón */}
                     <button
                       onClick={() => handleVerProductos(panel.animal)}
                       style={{
