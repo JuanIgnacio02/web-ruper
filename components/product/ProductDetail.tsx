@@ -45,14 +45,13 @@ export default function ProductDetail({ product: p }: { product: Product }) {
 
   /* ── GSAP entrance ── */
   useEffect(() => {
-    import('gsap').then(async ({ gsap }) => {
-      const { ScrollTrigger } = await import('gsap/ScrollTrigger')
-      gsap.registerPlugin(ScrollTrigger)
-
+    import('gsap').then(({ gsap }) => {
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+      // NOTE: pd-img-wrap does NOT use opacity:0 → image is always visible
+      // Only text/info elements use opacity animations
       tl.from('.pd-breadcrumb', { y: -16, opacity: 0, duration: 0.4 })
-        .from('.pd-img-wrap',   { x: -70, opacity: 0, duration: 0.75 }, '-=0.2')
-        .from('.pd-badge',      { y: -14, opacity: 0, duration: 0.4, ease: 'back.out(2)' }, '-=0.5')
+        .from('.pd-img-wrap',   { x: -40, duration: 0.65 }, '-=0.2')
+        .from('.pd-badge',      { y: -14, opacity: 0, duration: 0.4, ease: 'back.out(2)' }, '-=0.4')
         .from('.pd-brand',      { y: 20,  opacity: 0, duration: 0.4 }, '-=0.3')
         .from('.pd-title',      { y: 30,  opacity: 0, duration: 0.55, ease: 'power4.out' }, '-=0.3')
         .from('.pd-meta span',  { y: 16,  opacity: 0, duration: 0.35, stagger: 0.08 }, '-=0.3')
@@ -61,6 +60,8 @@ export default function ProductDetail({ product: p }: { product: Product }) {
         .from('.pd-price-box',  { y: 24,  opacity: 0, duration: 0.45, ease: 'back.out(1.5)' }, '-=0.2')
         .from('.pd-atc',        { y: 18,  opacity: 0, duration: 0.4 }, '-=0.25')
         .from('.pd-share',      { y: 14,  opacity: 0, duration: 0.35 }, '-=0.2')
+    }).catch(() => {
+      // If GSAP fails to load, elements stay visible (no harm done)
     })
   }, [])
 
@@ -104,8 +105,8 @@ export default function ProductDetail({ product: p }: { product: Product }) {
             <div
               className="pd-img-wrap relative flex items-center justify-center cursor-zoom-in transition-all"
               style={{
-                minHeight: 260,
-                padding: '36px 28px',
+                minHeight: 320,
+                padding: '40px 32px',
                 background: BG_CLASS_MAP[p.bg_class ?? ''] ?? CAT_GRADIENTS[p.category] ?? 'linear-gradient(135deg,#fff3ee,#ffe0d0)',
               }}
               onClick={() => p.img && !imgError && setImgZoom(true)}
