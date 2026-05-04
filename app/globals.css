@@ -68,6 +68,23 @@
 .badge-sale { background: #FF6B35; color: #fff; }
 .badge-top  { background: #FFB703; color: #1B1B2F; }
 
+/* ── Floating paw background ── */
+.paw-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+.paw {
+  position: absolute;
+  bottom: -60px;
+  opacity: 0;
+  font-size: 1.8rem;
+  animation: pawRise linear infinite;
+  user-select: none;
+}
+
 /* ── Accesibilidad ── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }

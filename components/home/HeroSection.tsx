@@ -4,7 +4,26 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 export default function HeroSection() {
-  const sectionRef = useRef<HTMLElement>(null)
+  const sectionRef  = useRef<HTMLElement>(null)
+  const pawBgRef    = useRef<HTMLDivElement>(null)
+
+  // Floating paw/emoji background
+  useEffect(() => {
+    const container = pawBgRef.current
+    if (!container) return
+    const icons = ['🐾', '🐶', '🐱', '🦜', '🐠']
+    for (let i = 0; i < 14; i++) {
+      const el = document.createElement('div')
+      el.className = 'paw'
+      el.textContent = icons[i % icons.length]
+      el.style.left = Math.random() * 100 + 'vw'
+      el.style.animationDuration = (14 + Math.random() * 12) + 's'
+      el.style.animationDelay    = '-' + (Math.random() * 16) + 's'
+      el.style.fontSize          = (1.2 + Math.random() * 1.4) + 'rem'
+      container.appendChild(el)
+    }
+    return () => { container.innerHTML = '' }
+  }, [])
 
   useEffect(() => {
     import('gsap').then(async ({ gsap }) => {
@@ -35,6 +54,9 @@ export default function HeroSection() {
 
   return (
     <section ref={sectionRef} id="inicio" className="relative min-h-screen flex items-center bg-gradient-to-br from-[var(--dark)] via-[var(--dark-2)] to-[#3d1d0a] overflow-hidden">
+      {/* Floating paw background */}
+      <div ref={pawBgRef} className="paw-bg" />
+
       {/* Shapes animadas */}
       <div className="absolute top-[-100px] right-[-100px] w-[500px] h-[500px] bg-[var(--primary)] rounded-full opacity-[.06] [animation:shapeFloat_12s_ease-in-out_infinite]" />
       <div className="absolute bottom-[-80px] left-[-80px]  w-[380px] h-[380px] bg-[var(--accent)] rounded-full opacity-[.05] [animation:shapeFloat_10s_ease-in-out_infinite_2s]" />

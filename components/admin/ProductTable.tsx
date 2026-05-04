@@ -3,7 +3,6 @@ import { useState } from 'react'
 import Image from 'next/image'
 import type { Product } from '@/types'
 import { formatPrice } from '@/lib/utils'
-import { createClient } from '@/lib/supabase/client'
 
 interface Props {
   products:  Product[]
@@ -13,21 +12,33 @@ interface Props {
 
 export default function ProductTable({ products, onEdit, onDeleted }: Props) {
   const [deleting, setDeleting] = useState<number | null>(null)
-  const supabase = createClient()
 
   const handleDelete = async (p: Product) => {
     if (!confirm(`¿Eliminar "${p.name}"?`)) return
     setDeleting(p.id)
-    const { error } = await supabase.from('productos').delete().eq('id', p.id)
-    if (error) { alert('Error al eliminar: ' + error.message); setDeleting(null); return }
-    onDeleted(p.id)
-    setDeleting(null)
+    try {
+      const res = await fetch(`/api/admin/products/${p.id}`, { method: 'DELETE' })
+      if (!res.ok) {
+        const json = await res.json()
+        alert('Error al eliminar: ' + (json.error ?? 'Error desconocido'))
+        return
+      }
+      onDeleted(p.id)
+    } finally {
+      setDeleting(null)
+    }
   }
 
   const handleToggleStock = async (p: Product) => {
-    const { data, error } = await supabase
-      .from('productos').update({ stock: !p.stock }).eq('id', p.id).select().single()
-    if (!error && data) onEdit(data as Product)
+    const res = await fetch(`/api/admin/products/${p.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ stock: !p.stock }),
+    })
+    if (res.ok) {
+      const data = await res.json()
+      onEdit(data as Product)
+    }
   }
 
   if (!products.length) {

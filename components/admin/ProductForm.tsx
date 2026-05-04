@@ -2,7 +2,6 @@
 import { useState, useRef } from 'react'
 import Image from 'next/image'
 import type { Product, ProductInsert, AnimalCategory } from '@/types'
-import { createClient } from '@/lib/supabase/client'
 import { convertToWebP, removeBackgroundCanvas, uploadToCloudinary } from '@/lib/cloudinary'
 
 interface Props {
@@ -13,8 +12,7 @@ interface Props {
 const CATEGORIES: AnimalCategory[] = ['perros', 'gatos', 'granja', 'aves', 'pequeños', 'peces', 'accesorios']
 
 export default function ProductForm({ product, onSaved }: Props) {
-  const supabase = createClient()
-  const isEdit   = !!product
+  const isEdit = !!product
 
   const [form, setForm] = useState<Partial<ProductInsert>>({
     name:        product?.name        ?? '',
@@ -38,6 +36,7 @@ export default function ProductForm({ product, onSaved }: Props) {
   })
 
   const [saving,    setSaving]    = useState(false)
+  const [saveError, setSaveError] = useState('')
   const [uploadPct, setUploadPct] = useState(0)
   const [uploading, setUploading] = useState(false)
   const [removeBg,  setRemoveBg]  = useState(true)
@@ -77,19 +76,29 @@ export default function ProductForm({ product, onSaved }: Props) {
     e.preventDefault()
     if (!form.name || !form.price) return
     setSaving(true)
+    setSaveError('')
     try {
       const payload = form as ProductInsert
+      let res: Response
       if (isEdit && product) {
-        const { data, error } = await supabase.from('productos').update(payload).eq('id', product.id).select().single()
-        if (error) throw error
-        onSaved(data as Product)
+        res = await fetch(`/api/admin/products/${product.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        })
       } else {
-        const { data, error } = await supabase.from('productos').insert(payload).select().single()
-        if (error) throw error
-        onSaved(data as Product)
+        res = await fetch('/api/admin/products', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        })
       }
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.error ?? 'Error desconocido')
+      onSaved(json as Product)
     } catch (err) {
-      alert('Error al guardar: ' + (err instanceof Error ? err.message : String(err)))
+      const msg = err instanceof Error ? err.message : String(err)
+      setSaveError(msg)
     } finally {
       setSaving(false)
     }
@@ -226,6 +235,12 @@ export default function ProductForm({ product, onSaved }: Props) {
 
         {/* Botón */}
         <div className="md:col-span-2 pt-2">
+          {saveError && (
+            <div className="mb-3 px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-[.85rem] flex items-center gap-2">
+              <i className="fas fa-exclamation-circle" />
+              {saveError}
+            </div>
+          )}
           <button type="submit" disabled={saving}
             className="w-full bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white font-bold py-4 rounded-xl transition-all text-[.96rem] disabled:opacity-60 flex items-center justify-center gap-2">
             <i className={`fas ${saving ? 'fa-spinner fa-spin' : isEdit ? 'fa-save' : 'fa-plus'}`} />
