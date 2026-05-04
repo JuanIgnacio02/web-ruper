@@ -127,27 +127,31 @@ export default function ProductDetail({ product: p }: { product: Product }) {
               </div>
 
               {p.img && !imgError ? (
-                <div className="relative w-[340px] h-[340px] flex-shrink-0">
-                  <Image
-                    src={p.img}
-                    alt={p.name}
-                    fill
-                    className="object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500"
-                    priority
-                    sizes="340px"
-                    onError={() => setImgError(true)}
-                  />
-                </div>
+                <Image
+                  src={p.img}
+                  alt={p.name}
+                  width={360}
+                  height={360}
+                  priority
+                  onError={() => setImgError(true)}
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    maxWidth: 360,
+                    maxHeight: 360,
+                    objectFit: 'contain',
+                    filter: 'drop-shadow(0 20px 40px rgba(0,0,0,.18))',
+                    transition: 'transform .5s ease',
+                  }}
+                  className="hover:scale-105"
+                />
               ) : (
-                <div className="flex flex-col items-center gap-3">
-                  <span className="text-[9rem] drop-shadow-lg hover:scale-105 transition-transform duration-500 block select-none leading-none">
-                    {p.emoji}
-                  </span>
-                  <span className="text-[.72rem] font-semibold px-3 py-1 rounded-full"
-                    style={{ background: 'rgba(255,255,255,.6)', color: 'var(--gray)' }}>
-                    {p.name}
-                  </span>
-                </div>
+                <span
+                  className="select-none leading-none"
+                  style={{ fontSize: '9rem', filter: 'drop-shadow(0 8px 20px rgba(0,0,0,.12))', transition: 'transform .5s ease' }}
+                >
+                  {p.emoji || '🐾'}
+                </span>
               )}
 
               {p.img && (
@@ -324,16 +328,21 @@ export default function ProductDetail({ product: p }: { product: Product }) {
           >
             <i className="fas fa-times" />
           </button>
-          <div className="relative" style={{ width: '90vw', maxWidth: 700, height: '90vh', maxHeight: 700 }}
-            onClick={e => e.stopPropagation()}>
-            <Image
-              src={p.img}
-              alt={p.name}
-              fill
-              className="object-contain rounded-2xl"
-              sizes="90vw"
-            />
-          </div>
+          <Image
+            src={p.img}
+            alt={p.name}
+            width={900}
+            height={900}
+            onClick={e => e.stopPropagation()}
+            style={{
+              maxWidth: '90vw',
+              maxHeight: '90vh',
+              width: 'auto',
+              height: 'auto',
+              objectFit: 'contain',
+              borderRadius: 16,
+            }}
+          />
         </div>
       )}
     </div>
