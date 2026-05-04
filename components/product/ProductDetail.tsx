@@ -1,6 +1,5 @@
 'use client'
 import { useEffect, useState } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import type { Product } from '@/types'
 import { useCart } from '@/hooks/useCart'
@@ -127,28 +126,27 @@ export default function ProductDetail({ product: p }: { product: Product }) {
               </div>
 
               {p.img && !imgError ? (
-                <Image
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
                   src={p.img}
                   alt={p.name}
-                  width={360}
-                  height={360}
-                  priority
                   onError={() => setImgError(true)}
                   style={{
-                    width: '100%',
-                    height: 'auto',
                     maxWidth: 360,
                     maxHeight: 360,
+                    width: '100%',
+                    height: 'auto',
                     objectFit: 'contain',
                     filter: 'drop-shadow(0 20px 40px rgba(0,0,0,.18))',
                     transition: 'transform .5s ease',
+                    display: 'block',
                   }}
                   className="hover:scale-105"
                 />
               ) : (
                 <span
                   className="select-none leading-none"
-                  style={{ fontSize: '9rem', filter: 'drop-shadow(0 8px 20px rgba(0,0,0,.12))', transition: 'transform .5s ease' }}
+                  style={{ fontSize: '9rem', filter: 'drop-shadow(0 8px 20px rgba(0,0,0,.12))', transition: 'transform .5s ease', display: 'block' }}
                 >
                   {p.emoji || '🐾'}
                 </span>
@@ -328,11 +326,10 @@ export default function ProductDetail({ product: p }: { product: Product }) {
           >
             <i className="fas fa-times" />
           </button>
-          <Image
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src={p.img}
             alt={p.name}
-            width={900}
-            height={900}
             onClick={e => e.stopPropagation()}
             style={{
               maxWidth: '90vw',
@@ -341,6 +338,7 @@ export default function ProductDetail({ product: p }: { product: Product }) {
               height: 'auto',
               objectFit: 'contain',
               borderRadius: 16,
+              display: 'block',
             }}
           />
         </div>
