@@ -47,8 +47,8 @@ export default function ProductsSection({ visible, active, onFilter }: Props) {
         </div>
 
         {/* Filter bar */}
-        <div className="relative mb-10 overflow-hidden">
-          <div className="flex gap-2.5 overflow-x-auto pb-2 scrollbar-none">
+        <div className="relative mb-10">
+          <div className="flex gap-2.5 flex-wrap">
             {FILTER_BUTTONS.map(btn => (
               <button
                 key={btn.value}
@@ -66,7 +66,11 @@ export default function ProductsSection({ visible, active, onFilter }: Props) {
         </div>
 
         {/* Grid */}
-        <div ref={gridRef} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+        <div
+          ref={gridRef}
+          className="prod-grid gap-[22px]"
+          style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(255px, 1fr))' }}
+        >
           {active.animal === null ? (
             <div className="col-span-full text-center py-20 px-6">
               <div className="text-5xl mb-5 opacity-40">🐶🐱🐄</div>

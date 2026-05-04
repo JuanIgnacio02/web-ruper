@@ -28,14 +28,17 @@ export default function QuienesSomosSection() {
   }, [])
 
   return (
-    <section className="qs-section flex flex-col md:flex-row min-h-[600px]">
+    <section className="qs-section grid grid-cols-1 md:grid-cols-2 min-h-[560px] overflow-hidden">
       {/* Historia */}
       <div
-        className="qs-left flex-1 relative flex items-end bg-cover bg-center min-h-[360px] md:min-h-0"
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=900&q=80&fit=crop')" }}
+        className="qs-left relative flex items-center bg-cover bg-center overflow-hidden"
+        style={{
+          backgroundImage: "url('https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=900&q=80&fit=crop')",
+          padding: '80px 60px',
+        }}
       >
-        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent" />
-        <div className="relative z-10 p-10 md:p-14">
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(255,107,53,.82) 0%, rgba(180,50,10,.70) 100%)' }} />
+        <div className="relative z-10">
           <div className="inline-flex items-center gap-2 bg-[var(--primary)]/25 text-[var(--primary-light)] border border-[var(--primary)]/20 px-4 py-1.5 rounded-full text-[.72rem] font-bold uppercase tracking-wider mb-4">
             <i className="fas fa-paw" /> Nuestra Historia
           </div>
@@ -49,7 +52,7 @@ export default function QuienesSomosSection() {
           <div className="flex gap-8 mt-8">
             {[{ n: '+500', l: 'Clientes felices' }, { n: '12+', l: 'Años de exp.' }, { n: '14+', l: 'Marcas líderes' }].map(s => (
               <div key={s.l}>
-                <div className="text-[1.8rem] font-black text-[var(--primary)]">{s.n}</div>
+                <div className="text-[1.8rem] font-black text-white">{s.n}</div>
                 <div className="text-white/55 text-[.72rem] font-medium">{s.l}</div>
               </div>
             ))}
@@ -59,24 +62,41 @@ export default function QuienesSomosSection() {
 
       {/* Valores */}
       <div
-        className="qs-right flex-1 relative flex items-end bg-cover bg-center min-h-[360px] md:min-h-0"
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=900&q=80&fit=crop')" }}
+        className="qs-right relative flex items-center bg-cover bg-center overflow-hidden"
+        style={{
+          backgroundImage: "url('https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=900&q=80&fit=crop')",
+          padding: '80px 60px',
+        }}
       >
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent" />
-        <div className="relative z-10 p-10 md:p-14 w-full">
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(27,27,47,.88) 0%, rgba(45,106,79,.75) 100%)' }} />
+        <div className="relative z-10 w-full">
           <div className="inline-flex items-center gap-2 bg-[var(--accent)]/25 text-[var(--accent)] border border-[var(--accent)]/20 px-4 py-1.5 rounded-full text-[.72rem] font-bold uppercase tracking-wider mb-4">
             <i className="fas fa-star" /> Nuestra Promesa
           </div>
           <h2 className="text-4xl md:text-5xl font-black text-white leading-tight mb-6">Por qué<br />elegirnos</h2>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3">
             {[
               { icon: 'fa-certificate', title: 'Calidad garantizada',      desc: 'Solo productos originales con distribuidores oficiales' },
               { icon: 'fa-heart',       title: 'Atención personalizada',   desc: 'Te asesoramos para elegir el mejor alimento' },
               { icon: 'fa-truck',       title: 'Entrega en Malargüe',      desc: 'Llevamos tu pedido donde estés en la ciudad' },
               { icon: 'fa-tags',        title: 'Precios accesibles',       desc: 'Los mejores precios sin comprometer la calidad' },
             ].map(v => (
-              <div key={v.title} className="flex items-start gap-3">
-                <div className="w-9 h-9 bg-[var(--primary)]/20 rounded-lg flex items-center justify-center text-[var(--primary)] flex-shrink-0 text-sm mt-0.5">
+              <div
+                key={v.title}
+                className="flex items-start gap-3 transition-all duration-300 hover:translate-x-[5px]"
+                style={{
+                  background: 'rgba(255,255,255,.07)',
+                  border: '1px solid rgba(255,255,255,.1)',
+                  borderRadius: '14px',
+                  padding: '18px 20px',
+                }}
+                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,.12)')}
+                onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,.07)')}
+              >
+                <div
+                  className="flex-shrink-0 flex items-center justify-center text-white text-sm"
+                  style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(255,255,255,.15)' }}
+                >
                   <i className={`fas ${v.icon}`} />
                 </div>
                 <div>

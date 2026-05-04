@@ -38,8 +38,14 @@ export default function WhyUsSection() {
 
         <div className="feat-grid grid gap-5" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))' }}>
           {FEATURES.map(f => (
-            <div key={f.title} className="feat-card bg-white/4 border border-white/7 rounded-[var(--radius)] p-8 hover:bg-white/7 hover:border-[var(--primary)]/30 hover:-translate-y-1 transition-all group">
-              <div className="w-12 h-12 bg-[var(--primary)]/15 rounded-xl flex items-center justify-center text-[var(--primary)] text-lg mb-4 group-hover:bg-[var(--primary)] group-hover:text-white transition-all">
+            <div key={f.title} className="feat-card relative overflow-hidden bg-white/4 border border-white/7 rounded-[var(--radius)] p-8 hover:bg-white/7 hover:border-[var(--primary)]/30 hover:-translate-y-1 transition-all group after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[3px] after:bg-gradient-to-r after:from-[var(--primary)] after:to-[var(--accent)] after:transition-all after:duration-500 hover:after:w-full">
+              <div style={{
+                width: '58px', height: '58px', borderRadius: '16px',
+                background: 'linear-gradient(135deg, var(--primary), var(--primary-dark))',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '1.4rem', color: '#fff', marginBottom: '20px',
+                boxShadow: '0 6px 20px rgba(255,107,53,.28)',
+              }}>
                 <i className={`fas ${f.icon}`} />
               </div>
               <h3 className="text-white font-bold text-[1rem] mb-2">{f.title}</h3>

@@ -24,7 +24,7 @@ export default function BrandsSection() {
     import('gsap').then(async ({ gsap }) => {
       const { ScrollTrigger } = await import('gsap/ScrollTrigger')
       gsap.registerPlugin(ScrollTrigger)
-      gsap.from('.brand-logo-item', {
+      gsap.from('.brand-logo', {
         scrollTrigger: { trigger: '.brands-grid', start: 'top 88%', once: true },
         scale: 0.75, opacity: 0, duration: 0.4, stagger: 0.05, ease: 'back.out(1.6)', clearProps: 'all',
       })
@@ -45,13 +45,13 @@ export default function BrandsSection() {
           {LOGOS.map(logo => (
             <div
               key={logo.alt}
-              className={`brand-logo-item bg-white border border-[var(--border)] rounded-2xl flex items-center justify-center min-h-[100px] cursor-default overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,.06)] hover:-translate-y-1.5 hover:shadow-[0_12px_32px_rgba(0,0,0,.13)] hover:border-[var(--primary)] transition-all duration-300 ${logo.fitted ? 'p-0' : 'p-4'}`}
+              className={`brand-logo group bg-white border border-[var(--border)] rounded-2xl flex items-center justify-center min-h-[100px] cursor-default overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,.06)] hover:-translate-y-1.5 hover:shadow-[0_12px_32px_rgba(0,0,0,.13)] hover:border-[var(--primary)] transition-all duration-300 ${logo.fitted ? 'p-0' : 'p-4'}`}
             >
               <Image
                 src={logo.src}
                 alt={logo.alt}
                 width={148} height={100}
-                className={`object-contain transition-all duration-300 hover:scale-105 ${logo.fitted ? 'w-full h-full rounded-2xl' : 'max-h-[68px] w-auto'}`}
+                className={`object-contain transition-all duration-300 group-hover:scale-[1.06] group-hover:[filter:grayscale(0%)_opacity(1)] ${logo.fitted ? 'w-full h-full rounded-2xl' : 'max-h-[68px] w-auto'}`}
                 style={{ filter: 'grayscale(10%) opacity(.9)' }}
                 loading="lazy"
               />

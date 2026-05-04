@@ -19,7 +19,9 @@ export default function NavbarClient() {
   return (
     <>
       <nav className={`fixed top-0 left-0 right-0 z-[999] transition-all duration-300 ${
-        scrolled ? 'bg-white/95 backdrop-blur-md shadow-[var(--shadow)] py-3' : 'bg-white/90 backdrop-blur-sm py-4'
+        scrolled
+          ? 'bg-white/97 backdrop-blur-xl shadow-[0_2px_20px_rgba(0,0,0,.08)] py-[13px]'
+          : 'py-[22px]'
       }`}>
         <div className="max-w-[1300px] mx-auto px-7 flex items-center justify-between">
 
@@ -27,8 +29,8 @@ export default function NavbarClient() {
           <Link href="/" className="flex items-center gap-3 no-underline">
             <Image src="/img/logo.svg" alt="RUPER logo" width={46} height={46} className="rounded-full flex-shrink-0" />
             <div>
-              <div className="font-[var(--font-fredoka)] tracking-[2px] text-[1.35rem] text-[var(--dark)]">ruper</div>
-              <div className="text-[.7rem] text-[var(--gray)] font-medium hidden sm:block">Alimentos Balanceados</div>
+              <div className={`font-[var(--font-fredoka)] tracking-[2px] text-[1.35rem] transition-colors ${scrolled ? 'text-[var(--primary)]' : 'text-white'}`}>ruper</div>
+              <div className={`text-[.6rem] tracking-[2.5px] uppercase hidden sm:block transition-colors ${scrolled ? 'text-[var(--gray)]' : 'text-white/55'}`}>Alimentos Balanceados</div>
             </div>
           </Link>
 
@@ -41,7 +43,7 @@ export default function NavbarClient() {
               { href: '/contacto',   label: 'Contacto' },
             ].map(l => (
               <li key={l.href}>
-                <Link href={l.href} className="text-[.88rem] font-semibold text-[var(--dark)] hover:text-[var(--primary)] transition-colors">
+                <Link href={l.href} className={`text-[.88rem] font-medium relative transition-colors after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-[var(--primary)] after:transition-all hover:after:w-full ${scrolled ? 'text-[var(--dark)]' : 'text-white/88'}`}>
                   {l.label}
                 </Link>
               </li>
@@ -67,9 +69,9 @@ export default function NavbarClient() {
               className="md:hidden flex flex-col gap-[5px] p-2"
               aria-label="Abrir menú"
             >
-              <span className="w-5 h-0.5 bg-[var(--dark)] rounded block" />
-              <span className="w-5 h-0.5 bg-[var(--dark)] rounded block" />
-              <span className="w-5 h-0.5 bg-[var(--dark)] rounded block" />
+              <span className={`w-6 h-[2px] rounded block transition-colors ${scrolled ? 'bg-[var(--dark)]' : 'bg-white'}`} />
+              <span className={`w-6 h-[2px] rounded block transition-colors ${scrolled ? 'bg-[var(--dark)]' : 'bg-white'}`} />
+              <span className={`w-6 h-[2px] rounded block transition-colors ${scrolled ? 'bg-[var(--dark)]' : 'bg-white'}`} />
             </button>
           </div>
         </div>

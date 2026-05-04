@@ -7,7 +7,7 @@ export default function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
-    import('gsap').then(({ gsap }) => {
+    import('gsap').then(async ({ gsap }) => {
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
       tl.from('.hero-badge',               { y: -22, opacity: 0, duration: 0.5 })
         .from('.hero-title',               { y: 64,  opacity: 0, duration: 0.75, ease: 'power4.out' }, '-=0.22')
@@ -17,6 +17,19 @@ export default function HeroSection() {
         .from('.hero-visual',              { x: 80,  opacity: 0, duration: 0.85, ease: 'power3.out' }, '-=0.75')
         .from('.hero-card-1',              { x: 36,  opacity: 0, scale: 0.88, duration: 0.52, ease: 'back.out(1.6)' }, '-=0.42')
         .from('.hero-card-2',              { x: -36, opacity: 0, scale: 0.88, duration: 0.52, ease: 'back.out(1.6)' }, '-=0.44')
+
+      const { ScrollTrigger } = await import('gsap/ScrollTrigger')
+      gsap.registerPlugin(ScrollTrigger)
+
+      // Parallax
+      gsap.to('.hero-content', {
+        scrollTrigger: { trigger: '#inicio', scrub: 1.2 },
+        y: 90, ease: 'none',
+      })
+      gsap.to('.hero-visual', {
+        scrollTrigger: { trigger: '#inicio', scrub: 1.8 },
+        y: 55, ease: 'none',
+      })
     })
   }, [])
 
@@ -30,7 +43,7 @@ export default function HeroSection() {
       <div className="max-w-[1300px] mx-auto px-7 w-full grid grid-cols-1 lg:grid-cols-2 items-center gap-16 py-32">
 
         {/* Contenido */}
-        <div>
+        <div className="hero-content">
           <div className="hero-badge inline-flex items-center gap-2 bg-[var(--primary)]/20 text-[var(--primary-light)] border border-[var(--primary)]/20 px-4 py-2 rounded-full text-[.78rem] font-bold tracking-wider uppercase mb-6">
             <i className="fas fa-map-marker-alt" /> Malargüe, Mendoza
           </div>
