@@ -10,9 +10,10 @@ import { formatPrice } from '@/lib/utils'
 export default function ProductDetail({ product: p }: { product: Product }) {
   const { add } = useCart()
   const { showToast } = useToast()
-  const [added,   setAdded]   = useState(false)
-  const [qty,     setQty]     = useState(1)
-  const [imgZoom, setImgZoom] = useState(false)
+  const [added,    setAdded]    = useState(false)
+  const [qty,      setQty]      = useState(1)
+  const [imgZoom,  setImgZoom]  = useState(false)
+  const [imgError, setImgError] = useState(false)
 
   /* ── GSAP entrance ── */
   useEffect(() => {
@@ -100,19 +101,28 @@ export default function ProductDetail({ product: p }: { product: Product }) {
                 {p.stock ? 'En stock' : 'Sin stock'}
               </div>
 
-              {p.img ? (
-                <Image
-                  src={p.img}
-                  alt={p.name}
-                  width={380} height={380}
-                  className="object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500"
-                  priority
-                  style={{ maxHeight: 360 }}
-                />
+              {p.img && !imgError ? (
+                <div className="relative w-[340px] h-[340px] flex-shrink-0">
+                  <Image
+                    src={p.img}
+                    alt={p.name}
+                    fill
+                    className="object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500"
+                    priority
+                    sizes="340px"
+                    onError={() => setImgError(true)}
+                  />
+                </div>
               ) : (
-                <span className="text-[9rem] drop-shadow-lg hover:scale-105 transition-transform duration-500 block select-none">
-                  {p.emoji}
-                </span>
+                <div className="flex flex-col items-center gap-3">
+                  <span className="text-[9rem] drop-shadow-lg hover:scale-105 transition-transform duration-500 block select-none leading-none">
+                    {p.emoji}
+                  </span>
+                  <span className="text-[.72rem] font-semibold px-3 py-1 rounded-full"
+                    style={{ background: 'rgba(255,255,255,.6)', color: 'var(--gray)' }}>
+                    {p.name}
+                  </span>
+                </div>
               )}
 
               {p.img && (
@@ -276,7 +286,7 @@ export default function ProductDetail({ product: p }: { product: Product }) {
       </div>
 
       {/* Lightbox */}
-      {imgZoom && p.img && (
+      {imgZoom && p.img && !imgError && (
         <div
           className="fixed inset-0 z-[2000] flex items-center justify-center"
           style={{ background: 'rgba(0,0,0,.88)', backdropFilter: 'blur(8px)' }}
@@ -289,14 +299,16 @@ export default function ProductDetail({ product: p }: { product: Product }) {
           >
             <i className="fas fa-times" />
           </button>
-          <Image
-            src={p.img}
-            alt={p.name}
-            width={700} height={700}
-            className="object-contain rounded-2xl"
-            style={{ maxWidth: '90vw', maxHeight: '90vh' }}
-            onClick={e => e.stopPropagation()}
-          />
+          <div className="relative" style={{ width: '90vw', maxWidth: 700, height: '90vh', maxHeight: 700 }}
+            onClick={e => e.stopPropagation()}>
+            <Image
+              src={p.img}
+              alt={p.name}
+              fill
+              className="object-contain rounded-2xl"
+              sizes="90vw"
+            />
+          </div>
         </div>
       )}
     </div>
