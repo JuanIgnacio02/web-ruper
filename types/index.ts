@@ -20,6 +20,7 @@ export type BgClass =
   | 'bg-birds'
   | 'bg-fish'
   | 'bg-accessories'
+  | 'bg-small'
 
 export interface Product {
   id: number

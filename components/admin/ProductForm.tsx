@@ -90,7 +90,6 @@ export default function ProductForm({ product, onSaved }: Props) {
   const [removeBg,    setRemoveBg]    = useState(true)
   const [saving,      setSaving]      = useState(false)
   const [saveError,   setSaveError]   = useState('')
-  const [showUrlInput, setShowUrlInput] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
 
   // Restore category chips when editing
@@ -128,8 +127,7 @@ export default function ProductForm({ product, onSaved }: Props) {
       setUploadPct(100)
       setTimeout(() => setUploadPct(0), 800)
     } catch {
-      alert('Error al subir imagen. Podés pegar una URL directamente.')
-      setShowUrlInput(true)
+      alert('Error al subir imagen. Pegá la URL directamente en el campo de abajo.')
     } finally {
       setUploading(false)
       if (fileRef.current) fileRef.current.value = ''
@@ -159,14 +157,14 @@ export default function ProductForm({ product, onSaved }: Props) {
       flavor:      flavor.trim(),
       emoji:       emoji.trim() || '🐾',
       img:         img.trim(),
-      bg_class:    meta?.bg ?? 'bg-dogs',
+      bg_class:    (meta?.bg ?? 'bg-dogs') as import('@/types').BgClass,
       description: description.trim(),
       features:    features.split('\n').map(s => s.trim()).filter(Boolean),
       raza:        chips.raza,
       etapa:       chips.etapa,
       linea:       chips.linea,
       badge:       badgeParts[0] || '',
-      badge_type:  badgeParts[1] || null,
+      badge_type:  (badgeParts[1] || null) as import('@/types').BadgeType,
       stock,
       featured,
     }
@@ -377,7 +375,7 @@ export default function ProductForm({ product, onSaved }: Props) {
                   <p style={{ fontSize:'.75rem', color:'#6B7280', marginBottom:6, wordBreak:'break-all', maxWidth:300 }}>{img.slice(0, 60)}{img.length > 60 ? '…' : ''}</p>
                   <button
                     type="button"
-                    onClick={() => { setImg(''); setShowUrlInput(false) }}
+                    onClick={() => setImg('')}
                     style={{ background:'none', border:'1px solid #ef4444', color:'#ef4444', borderRadius:6, padding:'3px 10px', fontSize:'.75rem', cursor:'pointer' }}
                   >
                     ✕ Quitar imagen
@@ -386,16 +384,17 @@ export default function ProductForm({ product, onSaved }: Props) {
               </div>
             )}
 
-            {/* URL input fallback */}
-            <div style={{ marginTop: img ? 0 : 4 }}>
-              <button type="button" onClick={() => setShowUrlInput(v => !v)}
-                style={{ background:'none', border:'none', color:'#FF6B35', fontSize:'.78rem', fontWeight:600, cursor:'pointer', padding:0 }}>
-                {showUrlInput ? '▲ Ocultar' : '🔗 Pegar URL de imagen directamente'}
-              </button>
-              {showUrlInput && (
-                <input className={inputCls} value={img} onChange={e => setImg(e.target.value)}
-                  placeholder="https://..." style={{ marginTop:8 }} />
-              )}
+            {/* URL input — siempre visible */}
+            <div style={{ marginTop:6 }}>
+              <label style={{ fontSize:'.74rem', fontWeight:600, color:'#9CA3AF', display:'block', marginBottom:5 }}>
+                🔗 O pegá la URL de la imagen directamente
+              </label>
+              <input
+                className={inputCls}
+                value={img}
+                onChange={e => setImg(e.target.value)}
+                placeholder="https://res.cloudinary.com/... o cualquier URL de imagen"
+              />
             </div>
           </div>
 

@@ -324,7 +324,7 @@ export default function AdminPanel({ initialProducts }: { initialProducts: Produ
                   ➕ Agregar
                 </button>
               </div>
-              <ProductTable products={products} onEdit={startEdit} onDeleted={onDeleted} />
+              <ProductTable products={products} onEdit={startEdit} onDeleted={onDeleted} onNew={() => navTo('new')} />
             </div>
           )}
 
