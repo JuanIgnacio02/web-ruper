@@ -1,31 +1,11 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import type { Product } from '@/types'
 import { useCart } from '@/hooks/useCart'
 import { useToast } from '@/hooks/useToast'
 import { formatPrice } from '@/lib/utils'
-
-const CAT_GRADIENTS: Record<string, string> = {
-  perros:      'linear-gradient(135deg,#fff3ee,#ffe0d0)',
-  gatos:       'linear-gradient(135deg,#f3eeff,#e0d0ff)',
-  granja:      'linear-gradient(135deg,#eefff3,#d0f0d8)',
-  aves:        'linear-gradient(135deg,#fffbee,#fff0c0)',
-  peces:       'linear-gradient(135deg,#eef8ff,#d0e8ff)',
-  accesorios:  'linear-gradient(135deg,#fff0fa,#f5d0ff)',
-  'pequeños':  'linear-gradient(135deg,#eefff3,#c8f0d8)',
-}
-
-const BG_CLASS_MAP: Record<string, string> = {
-  'bg-dogs':        'linear-gradient(135deg,#fff3ee,#ffe0d0)',
-  'bg-cats':        'linear-gradient(135deg,#f3eeff,#e0d0ff)',
-  'bg-farm':        'linear-gradient(135deg,#eefff3,#d0f0d8)',
-  'bg-birds':       'linear-gradient(135deg,#fffbee,#fff0c0)',
-  'bg-fish':        'linear-gradient(135deg,#eef8ff,#d0e8ff)',
-  'bg-accessories': 'linear-gradient(135deg,#fff0fa,#f5d0ff)',
-  'bg-small':       'linear-gradient(135deg,#eefff3,#c8f0d8)',
-  'bg-acc':         'linear-gradient(135deg,#f5f5f5,#e8e8e8)',
-}
+import { getProductBg } from '@/lib/constants'
 
 export default function ProductDetail({ product: p }: { product: Product }) {
   const { add } = useCart()
@@ -36,43 +16,44 @@ export default function ProductDetail({ product: p }: { product: Product }) {
   const [imgError, setImgError] = useState(false)
   const [stickyVisible, setStickyVisible] = useState(false)
 
-  /* Show sticky ATC bar after scrolling past the main button (mobile) */
+  /* Sticky ATC bar — solo en mobile, aparece tras scrollear 320px */
   useEffect(() => {
     const onScroll = () => setStickyVisible(window.scrollY > 320)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  /* ── GSAP entrance ── */
+  /* GSAP entrance — cargado dinámicamente para no bloquear el bundle inicial */
   useEffect(() => {
     import('gsap').then(({ gsap }) => {
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
-      // NOTE: pd-img-wrap does NOT use opacity:0 → image is always visible
-      // Only text/info elements use opacity animations
-      tl.from('.pd-breadcrumb', { y: -16, opacity: 0, duration: 0.4 })
+      // pd-img-wrap: solo translate (sin opacity) para que la imagen sea siempre visible
+      tl.from('.pd-breadcrumb', { y: -16, autoAlpha: 0, duration: 0.4 })
         .from('.pd-img-wrap',   { x: -40, duration: 0.65 }, '-=0.2')
-        .from('.pd-badge',      { y: -14, opacity: 0, duration: 0.4, ease: 'back.out(2)' }, '-=0.4')
-        .from('.pd-brand',      { y: 20,  opacity: 0, duration: 0.4 }, '-=0.3')
-        .from('.pd-title',      { y: 30,  opacity: 0, duration: 0.55, ease: 'power4.out' }, '-=0.3')
-        .from('.pd-meta span',  { y: 16,  opacity: 0, duration: 0.35, stagger: 0.08 }, '-=0.3')
-        .from('.pd-desc',       { y: 20,  opacity: 0, duration: 0.4 }, '-=0.25')
-        .from('.pd-spec',       { x: -20, opacity: 0, duration: 0.35, stagger: 0.07 }, '-=0.2')
-        .from('.pd-price-box',  { y: 24,  opacity: 0, duration: 0.45, ease: 'back.out(1.5)' }, '-=0.2')
-        .from('.pd-atc',        { y: 18,  opacity: 0, duration: 0.4 }, '-=0.25')
-        .from('.pd-share',      { y: 14,  opacity: 0, duration: 0.35 }, '-=0.2')
+        .from('.pd-badge',      { y: -14, autoAlpha: 0, duration: 0.4, ease: 'back.out(2)' }, '-=0.4')
+        .from('.pd-brand',      { y: 20,  autoAlpha: 0, duration: 0.4 }, '-=0.3')
+        .from('.pd-title',      { y: 30,  autoAlpha: 0, duration: 0.55, ease: 'power4.out' }, '-=0.3')
+        .from('.pd-meta span',  { y: 16,  autoAlpha: 0, duration: 0.35, stagger: 0.08 }, '-=0.3')
+        .from('.pd-desc',       { y: 20,  autoAlpha: 0, duration: 0.4 }, '-=0.25')
+        .from('.pd-spec',       { x: -20, autoAlpha: 0, duration: 0.35, stagger: 0.07 }, '-=0.2')
+        .from('.pd-price-box',  { y: 24,  autoAlpha: 0, duration: 0.45, ease: 'back.out(1.5)' }, '-=0.2')
+        .from('.pd-atc',        { y: 18,  autoAlpha: 0, duration: 0.4 }, '-=0.25')
+        .from('.pd-share',      { y: 14,  autoAlpha: 0, duration: 0.35 }, '-=0.2')
     }).catch(() => {
-      // If GSAP fails to load, elements stay visible (no harm done)
+      // Si GSAP falla, los elementos quedan visibles sin animación
     })
   }, [])
 
-  const handleAdd = () => {
+  const handleAdd = useCallback(() => {
     for (let i = 0; i < qty; i++) {
       add({ name: p.name, price: p.price, emoji: p.emoji, cat: p.subcategory ?? p.category })
     }
     showToast(`${p.emoji} ${p.name.split(' ').slice(0, 3).join(' ')} agregado`, 'ok')
     setAdded(true)
     setTimeout(() => setAdded(false), 1200)
-  }
+  }, [add, showToast, p, qty])
+
+  const bg = getProductBg(p.bg_class, p.category)
 
   const specs = [
     p.raza   && { icon: 'fa-dog',            label: 'Tamaño/Tipo',   value: capitalize(p.raza) },
@@ -81,6 +62,10 @@ export default function ProductDetail({ product: p }: { product: Product }) {
     p.weight && { icon: 'fa-weight-hanging',  label: 'Presentación',  value: p.weight },
     p.flavor && { icon: 'fa-utensils',        label: 'Sabor',         value: p.flavor },
   ].filter(Boolean) as { icon: string; label: string; value: string }[]
+
+  const waMsg = encodeURIComponent(
+    `Hola RUPER! Me interesa: *${p.name}*${p.weight ? ` (${p.weight})` : ''} — $${p.price.toLocaleString('es-AR')} 🐾`
+  )
 
   return (
     <div className="min-h-screen pt-[72px] md:pt-24 pb-[100px] md:pb-20" style={{ background: 'var(--light)' }}>
@@ -103,11 +88,11 @@ export default function ProductDetail({ product: p }: { product: Product }) {
 
             {/* ─── Imagen ─── */}
             <div
-              className="pd-img-wrap relative flex items-center justify-center cursor-zoom-in transition-all"
+              className="pd-img-wrap relative flex items-center justify-center cursor-zoom-in"
               style={{
                 minHeight: 320,
                 padding: '40px 32px',
-                background: BG_CLASS_MAP[p.bg_class ?? ''] ?? CAT_GRADIENTS[p.category] ?? 'linear-gradient(135deg,#fff3ee,#ffe0d0)',
+                background: bg,
               }}
               onClick={() => p.img && !imgError && setImgZoom(true)}
             >
@@ -127,10 +112,7 @@ export default function ProductDetail({ product: p }: { product: Product }) {
                   border: `1px solid ${p.stock ? 'rgba(45,106,79,.2)' : 'rgba(239,68,68,.2)'}`,
                 }}
               >
-                <span
-                  className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                  style={{ background: p.stock ? '#2D6A4F' : '#EF4444' }}
-                />
+                <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: p.stock ? '#2D6A4F' : '#EF4444' }} />
                 {p.stock ? 'En stock' : 'Sin stock'}
               </div>
 
@@ -141,10 +123,8 @@ export default function ProductDetail({ product: p }: { product: Product }) {
                   alt={p.name}
                   onError={() => setImgError(true)}
                   style={{
-                    maxWidth: 360,
-                    maxHeight: 360,
-                    width: '100%',
-                    height: 'auto',
+                    maxWidth: 360, maxHeight: 360,
+                    width: '100%', height: 'auto',
                     objectFit: 'contain',
                     filter: 'drop-shadow(0 20px 40px rgba(0,0,0,.18))',
                     transition: 'transform .5s ease',
@@ -174,19 +154,16 @@ export default function ProductDetail({ product: p }: { product: Product }) {
             {/* ─── Info ─── */}
             <div className="flex flex-col p-8 md:p-12">
 
-              {/* Brand */}
               {p.brand && (
                 <div className="pd-brand flex items-center gap-2 text-[.72rem] font-bold uppercase tracking-[2px] mb-3" style={{ color: 'var(--primary)' }}>
                   <i className="fas fa-tag text-[.65rem]" /> {p.brand}
                 </div>
               )}
 
-              {/* Title */}
               <h1 className="pd-title font-black leading-tight mb-4" style={{ fontSize: 'clamp(1.5rem, 3vw, 2.1rem)', color: 'var(--dark)' }}>
                 {p.name}
               </h1>
 
-              {/* Category chips */}
               <div className="pd-meta flex flex-wrap gap-2 mb-5">
                 <span className="inline-flex items-center gap-1.5 text-[.72rem] font-semibold px-3 py-1.5 rounded-full capitalize"
                   style={{ background: 'rgba(255,107,53,.08)', color: 'var(--primary)', border: '1px solid rgba(255,107,53,.15)' }}>
@@ -200,20 +177,17 @@ export default function ProductDetail({ product: p }: { product: Product }) {
                 )}
               </div>
 
-              {/* Description */}
               {p.description && (
                 <p className="pd-desc text-[.9rem] leading-relaxed mb-6" style={{ color: 'var(--gray)' }}>
                   {p.description}
                 </p>
               )}
 
-              {/* Specs */}
               {specs.length > 0 && (
                 <div className="flex flex-col gap-2.5 mb-6">
                   {specs.map(s => (
                     <div key={s.label} className="pd-spec flex items-center gap-3 text-[.85rem]">
-                      <div className="w-8 h-8 rounded-[10px] flex items-center justify-center flex-shrink-0"
-                        style={{ background: 'rgba(255,107,53,.1)' }}>
+                      <div className="w-8 h-8 rounded-[10px] flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(255,107,53,.1)' }}>
                         <i className={`fas ${s.icon} text-[.75rem]`} style={{ color: 'var(--primary)' }} />
                       </div>
                       <span className="min-w-[90px]" style={{ color: 'var(--gray)' }}>{s.label}</span>
@@ -223,7 +197,6 @@ export default function ProductDetail({ product: p }: { product: Product }) {
                 </div>
               )}
 
-              {/* Features */}
               {p.features && p.features.length > 0 && (
                 <ul className="flex flex-col gap-1.5 mb-6">
                   {p.features.map((f, i) => (
@@ -235,7 +208,6 @@ export default function ProductDetail({ product: p }: { product: Product }) {
                 </ul>
               )}
 
-              {/* Divider */}
               <div className="border-t mb-6" style={{ borderColor: 'var(--border)' }} />
 
               {/* Price + qty */}
@@ -248,24 +220,22 @@ export default function ProductDetail({ product: p }: { product: Product }) {
                   </div>
                 </div>
 
-                {/* Qty */}
+                {/* Qty — CSS hover en lugar de onMouseEnter/Leave */}
                 <div className="flex items-center gap-3 rounded-[12px] px-3 py-2.5" style={{ background: 'var(--light)' }}>
                   <button
                     onClick={() => setQty(q => Math.max(1, q - 1))}
-                    className="w-7 h-7 rounded-[8px] flex items-center justify-center text-[.85rem] transition-all"
+                    className="qty-btn w-7 h-7 rounded-[8px] flex items-center justify-center text-[.85rem] transition-[background-color,color] duration-200"
                     style={{ background: 'var(--white)', color: 'var(--dark)', boxShadow: '0 1px 4px rgba(0,0,0,.08)' }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'var(--primary)'; (e.currentTarget as HTMLElement).style.color = '#fff' }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'var(--white)'; (e.currentTarget as HTMLElement).style.color = 'var(--dark)' }}
+                    aria-label="Reducir cantidad"
                   >
                     <i className="fas fa-minus" />
                   </button>
                   <span className="font-bold min-w-[20px] text-center" style={{ color: 'var(--dark)' }}>{qty}</span>
                   <button
                     onClick={() => setQty(q => q + 1)}
-                    className="w-7 h-7 rounded-[8px] flex items-center justify-center text-[.85rem] transition-all"
+                    className="qty-btn w-7 h-7 rounded-[8px] flex items-center justify-center text-[.85rem] transition-[background-color,color] duration-200"
                     style={{ background: 'var(--white)', color: 'var(--dark)', boxShadow: '0 1px 4px rgba(0,0,0,.08)' }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'var(--primary)'; (e.currentTarget as HTMLElement).style.color = '#fff' }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'var(--white)'; (e.currentTarget as HTMLElement).style.color = 'var(--dark)' }}
+                    aria-label="Aumentar cantidad"
                   >
                     <i className="fas fa-plus" />
                   </button>
@@ -282,7 +252,7 @@ export default function ProductDetail({ product: p }: { product: Product }) {
               <button
                 onClick={handleAdd}
                 disabled={!p.stock}
-                className="pd-atc w-full py-[17px] rounded-[50px] font-bold text-[1rem] flex items-center justify-center gap-2.5 transition-all border-none mb-3"
+                className="pd-atc w-full py-[17px] rounded-[50px] font-bold text-[1rem] flex items-center justify-center gap-2.5 transition-[background,box-shadow] duration-200 border-none mb-3"
                 style={
                   added
                     ? { background: 'linear-gradient(135deg,#4CAF50,#388E3C)', color: '#fff', boxShadow: '0 6px 22px rgba(76,175,80,.35)' }
@@ -299,18 +269,16 @@ export default function ProductDetail({ product: p }: { product: Product }) {
               <div className="pd-share flex items-center gap-2.5">
                 <Link
                   href="/#productos"
-                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-[50px] text-[.85rem] font-semibold transition-all"
+                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-[50px] text-[.85rem] font-semibold transition-[border-color,color] duration-200 hover:border-[var(--primary)] hover:text-[var(--primary)]"
                   style={{ color: 'var(--gray)', border: '2px solid var(--border)' }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--primary)'; (e.currentTarget as HTMLElement).style.color = 'var(--primary)' }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'; (e.currentTarget as HTMLElement).style.color = 'var(--gray)' }}
                 >
                   <i className="fas fa-arrow-left text-[.75rem]" /> Volver
                 </Link>
                 <a
-                  href={`https://wa.me/2604123456?text=${encodeURIComponent(`Hola RUPER! Me interesa: *${p.name}*${p.weight ? ` (${p.weight})` : ''} — $${p.price.toLocaleString('es-AR')} 🐾`)}`}
+                  href={`https://wa.me/2604123456?text=${waMsg}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-[50px] text-[.85rem] font-bold text-white transition-all hover:-translate-y-0.5"
+                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-[50px] text-[.85rem] font-bold text-white transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5"
                   style={{ background: 'linear-gradient(135deg,#25D366,#128C7E)', boxShadow: '0 4px 16px rgba(37,211,102,.3)' }}
                 >
                   <i className="fab fa-whatsapp" /> Consultar
@@ -337,68 +305,38 @@ export default function ProductDetail({ product: p }: { product: Product }) {
         }}
       >
         <div className="flex items-center gap-3">
-          {/* Qty */}
-          <div
-            className="flex items-center gap-2 rounded-[12px] px-2.5 py-2 flex-shrink-0"
-            style={{ background: 'var(--light)', border: '1px solid var(--border)' }}
-          >
-            <button
-              onClick={() => setQty(q => Math.max(1, q - 1))}
-              className="w-8 h-8 rounded-[8px] flex items-center justify-center text-[.8rem] transition-all active:scale-90"
-              style={{ background: 'white', color: 'var(--dark)', boxShadow: '0 1px 4px rgba(0,0,0,.08)' }}
-            >
+          <div className="flex items-center gap-2 rounded-[12px] px-2.5 py-2 flex-shrink-0" style={{ background: 'var(--light)', border: '1px solid var(--border)' }}>
+            <button onClick={() => setQty(q => Math.max(1, q - 1))} className="w-8 h-8 rounded-[8px] flex items-center justify-center text-[.8rem] transition-[background-color] active:scale-90" style={{ background: 'white', color: 'var(--dark)', boxShadow: '0 1px 4px rgba(0,0,0,.08)' }} aria-label="Reducir">
               <i className="fas fa-minus" />
             </button>
             <span className="font-bold min-w-[18px] text-center text-[.9rem]" style={{ color: 'var(--dark)' }}>{qty}</span>
-            <button
-              onClick={() => setQty(q => q + 1)}
-              className="w-8 h-8 rounded-[8px] flex items-center justify-center text-[.8rem] transition-all active:scale-90"
-              style={{ background: 'white', color: 'var(--dark)', boxShadow: '0 1px 4px rgba(0,0,0,.08)' }}
-            >
+            <button onClick={() => setQty(q => q + 1)} className="w-8 h-8 rounded-[8px] flex items-center justify-center text-[.8rem] transition-[background-color] active:scale-90" style={{ background: 'white', color: 'var(--dark)', boxShadow: '0 1px 4px rgba(0,0,0,.08)' }} aria-label="Aumentar">
               <i className="fas fa-plus" />
             </button>
           </div>
 
-          {/* ATC button */}
           <button
             onClick={handleAdd}
             disabled={!p.stock}
-            className="flex-1 flex items-center justify-center gap-2 rounded-[14px] font-bold text-white transition-all active:scale-[.97] border-none"
+            className="flex-1 flex items-center justify-center gap-2 rounded-[14px] font-bold text-white transition-[background,box-shadow] active:scale-[.97] border-none"
             style={{
-              height:    50,
-              fontSize:  '0.9rem',
-              background: added
-                ? 'linear-gradient(135deg,#4CAF50,#388E3C)'
-                : p.stock
-                  ? 'linear-gradient(135deg,var(--primary),var(--primary-dark))'
-                  : 'var(--border)',
-              color:     added || p.stock ? '#fff' : 'var(--gray)',
-              boxShadow: added
-                ? '0 4px 16px rgba(76,175,80,.35)'
-                : p.stock
-                  ? '0 4px 16px rgba(255,107,53,.38)'
-                  : 'none',
-              cursor:    !p.stock ? 'not-allowed' : 'pointer',
+              height: 50, fontSize: '0.9rem',
+              background: added ? 'linear-gradient(135deg,#4CAF50,#388E3C)' : p.stock ? 'linear-gradient(135deg,var(--primary),var(--primary-dark))' : 'var(--border)',
+              color: added || p.stock ? '#fff' : 'var(--gray)',
+              boxShadow: added ? '0 4px 16px rgba(76,175,80,.35)' : p.stock ? '0 4px 16px rgba(255,107,53,.38)' : 'none',
+              cursor: !p.stock ? 'not-allowed' : 'pointer',
             }}
           >
             <i className={`fas ${added ? 'fa-check' : 'fa-shopping-cart'} text-[0.85rem]`} />
             {added ? '¡Agregado!' : p.stock ? `Agregar${qty > 1 ? ` ×${qty}` : ''}` : 'Sin stock'}
           </button>
 
-          {/* WA quick button */}
           <a
-            href={`https://wa.me/2604123456?text=${encodeURIComponent(`Hola RUPER! Me interesa: *${p.name}*${p.weight ? ` (${p.weight})` : ''} — $${p.price.toLocaleString('es-AR')} 🐾`)}`}
+            href={`https://wa.me/2604123456?text=${waMsg}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center rounded-[14px] flex-shrink-0 transition-all active:scale-90"
-            style={{
-              width:      50,
-              height:     50,
-              background: 'linear-gradient(135deg,#25D366,#128C7E)',
-              color:      '#fff',
-              fontSize:   '1.15rem',
-              boxShadow:  '0 4px 14px rgba(37,211,102,.3)',
-            }}
+            className="flex items-center justify-center rounded-[14px] flex-shrink-0 transition-[opacity] active:scale-90"
+            style={{ width: 50, height: 50, background: 'linear-gradient(135deg,#25D366,#128C7E)', color: '#fff', fontSize: '1.15rem', boxShadow: '0 4px 14px rgba(37,211,102,.3)' }}
             aria-label="Consultar por WhatsApp"
           >
             <i className="fab fa-whatsapp" />
@@ -414,9 +352,10 @@ export default function ProductDetail({ product: p }: { product: Product }) {
           onClick={() => setImgZoom(false)}
         >
           <button
-            className="absolute top-5 right-5 w-10 h-10 rounded-full flex items-center justify-center text-white transition-all"
+            className="absolute top-5 right-5 w-10 h-10 rounded-full flex items-center justify-center text-white transition-[background-color]"
             style={{ background: 'rgba(255,255,255,.12)' }}
             onClick={() => setImgZoom(false)}
+            aria-label="Cerrar imagen"
           >
             <i className="fas fa-times" />
           </button>
@@ -425,15 +364,7 @@ export default function ProductDetail({ product: p }: { product: Product }) {
             src={p.img}
             alt={p.name}
             onClick={e => e.stopPropagation()}
-            style={{
-              maxWidth: '90vw',
-              maxHeight: '90vh',
-              width: 'auto',
-              height: 'auto',
-              objectFit: 'contain',
-              borderRadius: 16,
-              display: 'block',
-            }}
+            style={{ maxWidth: '90vw', maxHeight: '90vh', width: 'auto', height: 'auto', objectFit: 'contain', borderRadius: 16, display: 'block' }}
           />
         </div>
       )}

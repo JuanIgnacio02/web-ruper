@@ -18,7 +18,10 @@
   --shadow-lg:      0 12px 40px rgba(0,0,0,.14);
   --radius:         18px;
   --radius-sm:      10px;
-  --t:              all .3s ease;
+  /* ANTES: "all .3s ease" animaba TODAS las propiedades CSS incluyendo
+     width/height/top/left que generan reflows (layout). Ahora solo anima
+     las propiedades que se componen en GPU sin reflow. */
+  --t:              background-color .22s ease, color .22s ease, border-color .22s ease, box-shadow .22s ease, opacity .22s ease, transform .22s ease;
 }
 
 /* ── Reset ── */
@@ -83,6 +86,14 @@
   font-size: 1.8rem;
   animation: pawRise linear infinite;
   user-select: none;
+}
+
+/* ── Hero blur shapes — ocultos en mobile ──────────────────────────────────
+   filter:blur(90px) en 3 divs animados es extremadamente caro en GPU móvil.
+   En desktop se renderizan en su propia capa (will-change: transform).
+   En mobile simplemente se eliminan del paint tree. */
+@media (max-width: 1023px) {
+  .hero-blur-shapes { display: none; }
 }
 
 /* ── Mobile bottom nav spacing ── */

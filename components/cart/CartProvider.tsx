@@ -1,5 +1,5 @@
 'use client'
-import { createContext, useReducer, useState, useCallback } from 'react'
+import { createContext, useReducer, useState, useCallback, useMemo } from 'react'
 import type { CartItem, CartAction } from '@/types'
 import { formatPrice } from '@/lib/utils'
 import { buildWhatsAppUrl } from '@/lib/whatsapp'
@@ -50,9 +50,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, dispatch] = useReducer(cartReducer, [])
   const [isOpen, setIsOpen] = useState(false)
 
-  const count    = items.reduce((s, i) => s + i.qty, 0)
-  const total    = items.reduce((s, i) => s + i.price * i.qty, 0)
-  const totalStr = formatPrice(total)
+  // useMemo: los reduce() corren una sola vez por cambio de `items`,
+  // no en cada render del árbol bajo CartProvider.
+  const count    = useMemo(() => items.reduce((s, i) => s + i.qty, 0), [items])
+  const total    = useMemo(() => items.reduce((s, i) => s + i.price * i.qty, 0), [items])
+  const totalStr = useMemo(() => formatPrice(total), [total])
 
   const open      = useCallback(() => setIsOpen(true),  [])
   const close     = useCallback(() => setIsOpen(false), [])
@@ -65,8 +67,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     window.open(buildWhatsAppUrl(items), '_blank')
   }, [items])
 
+  // useMemo en el value del contexto: evita que todos los consumidores
+  // se re-rendericen cuando CartProvider re-renderiza por razones externas.
+  const value = useMemo<CartContextValue>(() => ({
+    items, count, total, totalStr, isOpen,
+    open, close, add, changeQty, remove, clear, sendToWA,
+  }), [items, count, total, totalStr, isOpen, open, close, add, changeQty, remove, clear, sendToWA])
+
   return (
-    <CartContext.Provider value={{ items, count, total, totalStr, isOpen, open, close, add, changeQty, remove, clear, sendToWA }}>
+    <CartContext.Provider value={value}>
       {children}
     </CartContext.Provider>
   )

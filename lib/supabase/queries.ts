@@ -1,8 +1,9 @@
+import { cache } from 'react'
 import { createClient } from './server'
 import type { Product, ProductInsert, ProductUpdate } from '@/types'
 
 // ─── GET ALL ────────────────────────────────────────────
-export async function getProducts(): Promise<Product[]> {
+export const getProducts = cache(async (): Promise<Product[]> => {
   const supabase = await createClient()
   const { data, error } = await supabase
     .from('productos')
@@ -14,10 +15,13 @@ export async function getProducts(): Promise<Product[]> {
     return []
   }
   return (data ?? []) as Product[]
-}
+})
 
 // ─── GET BY ID ──────────────────────────────────────────
-export async function getProductById(id: number): Promise<Product | null> {
+// React cache() deduplica llamadas con el mismo id dentro de un mismo request.
+// Esto elimina la doble query en /producto/[id] donde generateMetadata
+// y ProductPage llaman a esta función por separado.
+export const getProductById = cache(async (id: number): Promise<Product | null> => {
   const supabase = await createClient()
   const { data, error } = await supabase
     .from('productos')
@@ -30,7 +34,7 @@ export async function getProductById(id: number): Promise<Product | null> {
     return null
   }
   return data as Product
-}
+})
 
 // ─── INSERT ─────────────────────────────────────────────
 export async function saveProduct(payload: ProductInsert): Promise<Product> {

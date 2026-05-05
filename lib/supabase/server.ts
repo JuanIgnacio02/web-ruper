@@ -1,6 +1,8 @@
 import { createServerClient } from '@supabase/ssr'
+import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 
+/** Cliente con sesión de usuario — para Server Components y API routes */
 export async function createClient() {
   const cookieStore = await cookies()
 
@@ -23,5 +25,17 @@ export async function createClient() {
         },
       },
     }
+  )
+}
+
+/**
+ * Cliente sin cookies — para build-time (generateStaticParams).
+ * cookies() no está disponible durante el build, así que usamos el
+ * cliente base de supabase-js directamente con la anon key.
+ */
+export function createBuildClient() {
+  return createSupabaseClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
   )
 }

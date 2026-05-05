@@ -1,50 +1,33 @@
 'use client'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import type { Product } from '@/types'
 import { useCart } from '@/hooks/useCart'
 import { useToast } from '@/hooks/useToast'
-
-const BG_MAP: Record<string, string> = {
-  'bg-dogs':        'linear-gradient(135deg,#fff3ee,#ffe0d0)',
-  'bg-cats':        'linear-gradient(135deg,#f3eeff,#e0d0ff)',
-  'bg-farm':        'linear-gradient(135deg,#eefff3,#d0f0d8)',
-  'bg-birds':       'linear-gradient(135deg,#fffbee,#fff0c0)',
-  'bg-fish':        'linear-gradient(135deg,#eef8ff,#d0e8ff)',
-  'bg-accessories': 'linear-gradient(135deg,#fff0fa,#f5d0ff)',
-  'bg-small':       'linear-gradient(135deg,#eefff3,#c8f0d8)',
-  'bg-acc':         'linear-gradient(135deg,#f5f5f5,#e8e8e8)',
-}
-const CAT_BG: Record<string, string> = {
-  perros:     'linear-gradient(135deg,#fff3ee,#ffe0d0)',
-  gatos:      'linear-gradient(135deg,#f3eeff,#e0d0ff)',
-  granja:     'linear-gradient(135deg,#eefff3,#d0f0d8)',
-  aves:       'linear-gradient(135deg,#fffbee,#fff0c0)',
-  peces:      'linear-gradient(135deg,#eef8ff,#d0e8ff)',
-  accesorios: 'linear-gradient(135deg,#fff0fa,#f5d0ff)',
-}
+import { getProductBg } from '@/lib/constants'
 
 export default function ProductCard({ product: p }: { product: Product }) {
   const { add }        = useCart()
   const { showToast }  = useToast()
   const [added, setAdded] = useState(false)
 
-  const handleAdd = (e: React.MouseEvent) => {
+  // useCallback: evita que handleAdd sea una nueva función en cada render
+  const handleAdd = useCallback((e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
     add({ name: p.name, price: p.price, emoji: p.emoji, cat: p.subcategory ?? p.category })
     showToast(`${p.emoji} ${p.name.split(' ').slice(0, 3).join(' ')} agregado`, 'ok')
     setAdded(true)
     setTimeout(() => setAdded(false), 900)
-  }
+  }, [add, showToast, p])
 
-  const bg = BG_MAP[p.bg_class ?? ''] ?? CAT_BG[p.category] ?? 'linear-gradient(135deg,#fff3ee,#ffe0d0)'
+  const bg = getProductBg(p.bg_class, p.category)
 
   return (
     <Link
       href={`/producto/${p.id}`}
-      className="prod-card-anim group relative bg-white rounded-[var(--radius)] overflow-hidden shadow-[var(--shadow)] hover:-translate-y-2 hover:shadow-[var(--shadow-lg)] transition-all duration-300 block active:scale-[.98]"
+      className="prod-card-anim group relative bg-white rounded-[var(--radius)] overflow-hidden shadow-[var(--shadow)] hover:-translate-y-2 hover:shadow-[var(--shadow-lg)] transition-[transform,box-shadow] duration-300 block active:scale-[.98]"
     >
       {/* Badge */}
       {p.badge && (
@@ -64,6 +47,9 @@ export default function ProductCard({ product: p }: { product: Product }) {
             alt={p.name}
             width={180}
             height={180}
+            // sizes: le dice al browser qué ancho real tendrá la imagen en cada breakpoint.
+            // Sin esto, Next.js descarga el tamaño equivocado → LCP lento + datos de más.
+            sizes="(max-width: 640px) 160px, (max-width: 768px) 190px, 210px"
             className="w-full h-full object-contain p-3 group-hover:scale-110 transition-transform duration-500"
             loading="lazy"
           />
