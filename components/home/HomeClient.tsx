@@ -11,7 +11,6 @@ export default function HomeClient({ products }: { products: Product[] }) {
     <>
       <AnimalSelector activeAnimal={active.animal} onFilter={apply} />
       <ProductsSection
-        products={products}
         visible={visible}
         active={active}
         onFilter={apply}

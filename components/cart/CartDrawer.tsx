@@ -1,6 +1,5 @@
 'use client'
 import { useCart } from '@/hooks/useCart'
-import { formatPrice } from '@/lib/utils'
 import CartItem from './CartItem'
 
 export default function CartDrawer() {

@@ -139,7 +139,7 @@ export default function AnimalSelector({ activeAnimal, onFilter }: Props) {
               >
                 {/* Header row — always visible, tap to toggle */}
                 <button
-                  onClick={() => setExpanded(isActive ? panel.animal : panel.animal)}
+                  onClick={() => setExpanded(panel.animal)}
                   style={{
                     width: '100%',
                     display: 'flex',

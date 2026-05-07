@@ -44,7 +44,10 @@ export default function MobileBottomNav() {
     >
       <div className="flex items-stretch">
         {tabs.map(tab => {
-          const active = tab.exact ? pathname === tab.href : pathname.startsWith(tab.href.split('#')[0]) && pathname !== '/'
+          const base   = tab.href.split('#')[0] || '/'
+          const active = tab.href.includes('#')
+            ? pathname === base
+            : tab.exact ? pathname === base : pathname.startsWith(base)
           return (
             <Link
               key={tab.href}

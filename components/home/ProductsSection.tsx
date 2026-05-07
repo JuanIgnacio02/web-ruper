@@ -12,7 +12,6 @@ const FILTER_BUTTONS: { label: string; value: FilterAnimal }[] = [
 ]
 
 interface Props {
-  products: Product[]
   visible:  Product[]
   active:   ActiveFilter
   onFilter: (animal: FilterAnimal) => void
@@ -24,6 +23,7 @@ export default function ProductsSection({ visible, active, onFilter }: Props) {
   // Animate cards whenever the visible list changes
   useEffect(() => {
     if (!visible.length) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     import('gsap').then(({ gsap }) => {
       gsap.fromTo(
         '.prod-card-anim',

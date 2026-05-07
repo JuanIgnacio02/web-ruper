@@ -6,6 +6,7 @@ import { useCart } from '@/hooks/useCart'
 import { useToast } from '@/hooks/useToast'
 import { formatPrice } from '@/lib/utils'
 import { getProductBg } from '@/lib/constants'
+import { CONFIG } from '@/lib/config'
 
 export default function ProductDetail({ product: p }: { product: Product }) {
   const { add } = useCart()
@@ -22,6 +23,14 @@ export default function ProductDetail({ product: p }: { product: Product }) {
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  /* Cerrar lightbox con tecla Escape */
+  useEffect(() => {
+    if (!imgZoom) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setImgZoom(false) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [imgZoom])
 
   /* GSAP entrance — cargado dinámicamente para no bloquear el bundle inicial */
   useEffect(() => {
@@ -224,7 +233,8 @@ export default function ProductDetail({ product: p }: { product: Product }) {
                 <div className="flex items-center gap-3 rounded-[12px] px-3 py-2.5" style={{ background: 'var(--light)' }}>
                   <button
                     onClick={() => setQty(q => Math.max(1, q - 1))}
-                    className="qty-btn w-7 h-7 rounded-[8px] flex items-center justify-center text-[.85rem] transition-[background-color,color] duration-200"
+                    disabled={qty <= 1}
+                    className="qty-btn w-7 h-7 rounded-[8px] flex items-center justify-center text-[.85rem] transition-[background-color,color,opacity] duration-200 disabled:opacity-35 disabled:cursor-not-allowed"
                     style={{ background: 'var(--white)', color: 'var(--dark)', boxShadow: '0 1px 4px rgba(0,0,0,.08)' }}
                     aria-label="Reducir cantidad"
                   >
@@ -275,7 +285,7 @@ export default function ProductDetail({ product: p }: { product: Product }) {
                   <i className="fas fa-arrow-left text-[.75rem]" /> Volver
                 </Link>
                 <a
-                  href={`https://wa.me/2604123456?text=${waMsg}`}
+                  href={`https://wa.me/${CONFIG.WA_NUMBER}?text=${waMsg}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1 flex items-center justify-center gap-2 py-3 rounded-[50px] text-[.85rem] font-bold text-white transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5"
@@ -332,7 +342,7 @@ export default function ProductDetail({ product: p }: { product: Product }) {
           </button>
 
           <a
-            href={`https://wa.me/2604123456?text=${waMsg}`}
+            href={`https://wa.me/${CONFIG.WA_NUMBER}?text=${waMsg}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center rounded-[14px] flex-shrink-0 transition-[opacity] active:scale-90"

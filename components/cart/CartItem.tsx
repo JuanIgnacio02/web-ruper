@@ -18,6 +18,7 @@ export default function CartItem({ item }: { item: CartItemType }) {
           <div className="flex items-center gap-2 bg-white rounded-lg border border-[var(--border)] p-1">
             <button
               onClick={() => changeQty(item.name, -1)}
+              aria-label="Reducir cantidad"
               className="w-7 h-7 rounded-md flex items-center justify-center text-[var(--gray)] hover:bg-[var(--light)] transition-colors text-xs"
             >
               <i className="fas fa-minus" />
@@ -25,6 +26,7 @@ export default function CartItem({ item }: { item: CartItemType }) {
             <span className="font-bold text-[.88rem] text-[var(--dark)] min-w-[20px] text-center">{item.qty}</span>
             <button
               onClick={() => changeQty(item.name, +1)}
+              aria-label="Aumentar cantidad"
               className="w-7 h-7 rounded-md flex items-center justify-center text-[var(--gray)] hover:bg-[var(--light)] transition-colors text-xs"
             >
               <i className="fas fa-plus" />
@@ -34,6 +36,7 @@ export default function CartItem({ item }: { item: CartItemType }) {
         </div>
         <button
           onClick={() => remove(item.name)}
+          aria-label={`Quitar ${item.name} del pedido`}
           className="mt-1.5 text-[.72rem] text-[var(--gray)] hover:text-red-500 transition-colors flex items-center gap-1"
         >
           <i className="fas fa-trash-alt" /> Quitar
