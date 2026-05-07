@@ -108,7 +108,7 @@ export default function AdminPanel({ initialProducts }: { initialProducts: Produ
         >
           {/* Logo */}
           <div style={{ padding:'22px 22px 18px', display:'flex', alignItems:'center', gap:12, borderBottom:'1px solid rgba(255,255,255,.07)' }}>
-            <Image src="/img/logo.svg" alt="RUPER" width={36} height={36} className="rounded-full flex-shrink-0" />
+            <Image src="/img/logo.png" alt="RUPER" width={36} height={36} className="rounded-full flex-shrink-0" />
             <div>
               <div style={{ fontSize:'1.05rem', fontWeight:800, color:'#fff', letterSpacing:'.04em' }}>RUPER</div>
               <div style={{ fontSize:'.68rem', color:'rgba(255,255,255,.38)', textTransform:'uppercase', letterSpacing:'.08em' }}>Panel Admin</div>

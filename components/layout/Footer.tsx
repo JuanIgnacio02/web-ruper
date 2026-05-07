@@ -13,7 +13,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <Link href="/" className="flex items-center gap-3 mb-4 no-underline">
-              <Image src="/img/logo.svg" alt="RUPER" width={50} height={50} className="rounded-full" />
+              <Image src="/img/logo.png" alt="RUPER" width={50} height={50} className="rounded-full" />
               <div>
                 <div className="font-[var(--font-fredoka)] text-white tracking-[2px] text-[1.35rem]">ruper</div>
                 <div className="text-white/50 text-[.7rem]">Alimentos Balanceados</div>

@@ -31,7 +31,7 @@ export default function AdminLogin() {
     <div className="min-h-screen bg-gradient-to-br from-[var(--dark)] to-[var(--dark-2)] flex items-center justify-center px-4">
       <div className="w-full max-w-[360px] bg-white rounded-2xl shadow-2xl p-8">
         <div className="flex flex-col items-center mb-8">
-          <Image src="/img/logo.svg" alt="RUPER" width={56} height={56} className="rounded-full mb-3" />
+          <Image src="/img/logo.png" alt="RUPER" width={56} height={56} className="rounded-full mb-3" />
           <div className="font-[var(--font-fredoka)] text-[var(--dark)] tracking-[2px] text-[1.5rem]">ruper</div>
           <p className="text-[var(--gray)] text-[.8rem] mt-0.5">Panel de administración</p>
         </div>

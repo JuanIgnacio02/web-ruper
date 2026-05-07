@@ -79,7 +79,7 @@ export default function MobileMenu({ isOpen, onClose }: Props) {
           style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}
         >
           <div className="flex items-center gap-3">
-            <Image src="/img/logo.svg" alt="RUPER" width={40} height={40} className="rounded-full" />
+            <Image src="/img/logo.png" alt="RUPER" width={40} height={40} className="rounded-full" />
             <div>
               <div
                 className="font-[var(--font-fredoka)] tracking-[2px] text-[1.15rem]"

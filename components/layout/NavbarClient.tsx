@@ -35,7 +35,7 @@ export default function NavbarClient() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 no-underline">
             <Image
-              src="/img/logo.svg"
+              src="/img/logo.png"
               alt="RUPER logo"
               width={40}
               height={40}

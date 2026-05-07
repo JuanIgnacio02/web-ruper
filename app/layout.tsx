@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     url:         'https://web-ruper.vercel.app/',
     title:       'RUPER — Alimentos Balanceados | Malargüe, Mendoza',
     description: 'Tu tienda de alimentos balanceados para mascotas en Malargüe.',
-    images:      [{ url: 'https://web-ruper.vercel.app/img/logo.svg' }],
+    images:      [{ url: 'https://web-ruper.vercel.app/img/logo.png' }],
   },
   twitter: { card: 'summary' },
   alternates: { canonical: 'https://web-ruper.vercel.app/' },
