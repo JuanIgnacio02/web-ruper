@@ -3,17 +3,39 @@ import type { CloudinaryUploadResult } from '@/types'
 const CLOUD_NAME    = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!
 const UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!
 
-/** Convierte cualquier imagen a WebP via Canvas (calidad 0.85) */
-export function convertToWebP(file: File, quality = 0.85): Promise<Blob> {
+/** Máximo lado en px antes de redimensionar (evita subir imágenes de 4K a Cloudinary) */
+const MAX_PX  = 1200
+/** Calidad WebP de salida (0.82 = excelente equilibrio calidad/tamaño) */
+const QUALITY = 0.82
+
+/** Calcula dimensiones finales respetando aspect ratio, sin superar MAX_PX en ningún lado */
+function resizeToMax(
+  naturalWidth: number,
+  naturalHeight: number,
+  maxPx = MAX_PX
+): { w: number; h: number } {
+  if (naturalWidth <= maxPx && naturalHeight <= maxPx) {
+    return { w: naturalWidth, h: naturalHeight }
+  }
+  const ratio = Math.min(maxPx / naturalWidth, maxPx / naturalHeight)
+  return {
+    w: Math.round(naturalWidth  * ratio),
+    h: Math.round(naturalHeight * ratio),
+  }
+}
+
+/** Convierte cualquier imagen a WebP via Canvas, redimensionando si supera MAX_PX */
+export function convertToWebP(file: File, quality = QUALITY): Promise<Blob> {
   return new Promise((resolve, reject) => {
-    const img = new Image()
+    const img       = new Image()
     const objectUrl = URL.createObjectURL(file)
 
     img.onload = () => {
-      const canvas = document.createElement('canvas')
-      canvas.width  = img.width
-      canvas.height = img.height
-      canvas.getContext('2d')!.drawImage(img, 0, 0)
+      const { w, h } = resizeToMax(img.naturalWidth, img.naturalHeight)
+      const canvas    = document.createElement('canvas')
+      canvas.width    = w
+      canvas.height   = h
+      canvas.getContext('2d')!.drawImage(img, 0, 0, w, h)
       URL.revokeObjectURL(objectUrl)
       canvas.toBlob(
         blob => blob ? resolve(blob) : reject(new Error('No se pudo convertir a WebP')),
@@ -26,19 +48,20 @@ export function convertToWebP(file: File, quality = 0.85): Promise<Blob> {
   })
 }
 
-/** Remueve el fondo via BFS flood-fill desde los bordes y exporta en WebP */
+/** Remueve el fondo via BFS flood-fill desde los bordes y exporta en WebP.
+ *  Redimensiona antes del BFS para evitar freezes en el main thread con fotos grandes. */
 export function removeBackgroundCanvas(file: File): Promise<Blob> {
   return new Promise((resolve, reject) => {
-    const img = new Image()
+    const img       = new Image()
     const objectUrl = URL.createObjectURL(file)
 
     img.onload = () => {
-      const { width, height } = img
+      const { w: width, h: height } = resizeToMax(img.naturalWidth, img.naturalHeight)
       const canvas = document.createElement('canvas')
       canvas.width  = width
       canvas.height = height
       const ctx = canvas.getContext('2d', { willReadFrequently: true })!
-      ctx.drawImage(img, 0, 0)
+      ctx.drawImage(img, 0, 0, width, height)
       URL.revokeObjectURL(objectUrl)
 
       const imageData = ctx.getImageData(0, 0, width, height)
@@ -63,7 +86,7 @@ export function removeBackgroundCanvas(file: File): Promise<Blob> {
 
       const visited = new Uint8Array(width * height)
       const queue: number[] = []
-      for (let x = 0; x < width; x++) { queue.push(x, 0); queue.push(x, height - 1) }
+      for (let x = 0; x < width; x++)  { queue.push(x, 0); queue.push(x, height - 1) }
       for (let y = 1; y < height - 1; y++) { queue.push(0, y); queue.push(width - 1, y) }
 
       let qi = 0
@@ -82,7 +105,7 @@ export function removeBackgroundCanvas(file: File): Promise<Blob> {
       canvas.toBlob(
         blob => blob ? resolve(blob) : reject(new Error('Error al procesar imagen')),
         'image/webp',
-        0.85
+        QUALITY
       )
     }
 
@@ -121,4 +144,18 @@ export function uploadToCloudinary(
     xhr.onerror = () => reject(new Error('Error de red al subir imagen'))
     xhr.send(formData)
   })
+}
+
+/**
+ * Transforma una URL de Cloudinary para entregar la imagen optimizada:
+ * webp automático, calidad auto, limitada a `width` px de ancho.
+ *
+ * @example
+ * getOptimizedUrl(product.img, 800)
+ * // .../upload/w_800,f_auto,q_auto,c_limit/...
+ */
+export function getOptimizedUrl(url: string | null | undefined, width = 800): string {
+  if (!url) return ''
+  if (!url.includes('res.cloudinary.com')) return url
+  return url.replace('/upload/', `/upload/w_${width},f_auto,q_auto,c_limit/`)
 }

@@ -7,6 +7,7 @@ import { useToast } from '@/hooks/useToast'
 import { formatPrice } from '@/lib/utils'
 import { getProductBg } from '@/lib/constants'
 import { CONFIG } from '@/lib/config'
+import { getOptimizedUrl } from '@/lib/cloudinary'
 
 export default function ProductDetail({ product: p }: { product: Product }) {
   const { add } = useCart()
@@ -128,7 +129,7 @@ export default function ProductDetail({ product: p }: { product: Product }) {
               {p.img && !imgError ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={p.img}
+                  src={getOptimizedUrl(p.img, 800)}
                   alt={p.name}
                   onError={() => setImgError(true)}
                   style={{
@@ -311,6 +312,7 @@ export default function ProductDetail({ product: p }: { product: Product }) {
           paddingBottom: 'calc(10px + env(safe-area-inset-bottom))',
           transform:     stickyVisible ? 'translateY(0)' : 'translateY(105%)',
           transition:    'transform 0.3s cubic-bezier(0.32,0.72,0,1)',
+          willChange:    'transform',
           boxShadow:     '0 -4px 20px rgba(0,0,0,0.08)',
         }}
       >

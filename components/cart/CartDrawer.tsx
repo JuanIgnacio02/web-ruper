@@ -17,6 +17,7 @@ export default function CartDrawer() {
       <div
         role="dialog"
         aria-label="Carrito de pedido"
+        style={{ willChange: 'transform' }}
         className={`fixed top-0 right-0 bottom-0 w-[400px] max-w-full bg-white z-[1001] flex flex-col transition-transform duration-300 shadow-[-4px_0_30px_rgba(0,0,0,.1)] ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
       >
         {/* Header */}

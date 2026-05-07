@@ -478,7 +478,7 @@ export default function AnimalSelector({ activeAnimal, onFilter }: Props) {
                         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
                         cursor: 'pointer', marginTop: '6px',
                         boxShadow: '0 4px 20px rgba(0,0,0,.18)',
-                        width: '100%', transition: 'all .3s ease',
+                        width: '100%', transition: 'transform .3s ease, box-shadow .3s ease',
                       }}
                       onMouseEnter={e => {
                         (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-3px)'

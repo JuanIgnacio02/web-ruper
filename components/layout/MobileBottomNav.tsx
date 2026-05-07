@@ -1,26 +1,26 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useCart } from '@/hooks/useCart'
 
 export default function MobileBottomNav() {
-  const pathname               = usePathname()
+  const pathname                  = usePathname()
   const { count, open: openCart } = useCart()
-  const [visible, setVisible]  = useState(true)
-  const [lastY,   setLastY]    = useState(0)
+  const [visible, setVisible]     = useState(true)
+  const lastYRef                  = useRef(0)
 
-  /* Hide on scroll down, show on scroll up */
+  /* Hide on scroll down, show on scroll up — listener registered once */
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY
-      if (y < 80) { setVisible(true); setLastY(y); return }
-      setVisible(y < lastY)
-      setLastY(y)
+      if (y < 80) { setVisible(true); lastYRef.current = y; return }
+      setVisible(y < lastYRef.current)
+      lastYRef.current = y
     }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
-  }, [lastY])
+  }, [])
 
   const tabs = [
     { href: '/',          icon: 'fa-home',           label: 'Inicio',    exact: true  },
@@ -40,6 +40,7 @@ export default function MobileBottomNav() {
         paddingBottom: 'env(safe-area-inset-bottom)',
         transform:     visible ? 'translateY(0)' : 'translateY(100%)',
         transition:    'transform 0.35s cubic-bezier(0.32,0.72,0,1)',
+        willChange:    'transform',
       }}
     >
       <div className="flex items-stretch">
