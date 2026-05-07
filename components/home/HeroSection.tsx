@@ -171,7 +171,7 @@ export default function HeroSection() {
             <Link
               href="/nosotros"
               className="hero-btn inline-flex items-center gap-2.5 font-semibold text-[.98rem] text-white px-[34px] py-4 rounded-full transition-[background-color,transform] duration-200 hover:-translate-y-1 hover:bg-white/15"
-              style={{ background: 'rgba(255,255,255,.08)', border: '1px solid rgba(255,255,255,.18)', backdropFilter: 'blur(10px)' }}
+              style={{ background: 'rgba(255,255,255,.12)', border: '1px solid rgba(255,255,255,.18)' }}
             >
               <i className="fas fa-info-circle" /> Conocenos
             </Link>
@@ -214,7 +214,7 @@ export default function HeroSection() {
 
             <div
               className="hcard1 absolute flex items-center gap-3 rounded-2xl"
-              style={{ bottom: -18, left: -32, background: 'rgba(255,255,255,.96)', backdropFilter: 'blur(20px)', padding: '14px 18px', boxShadow: '0 10px 40px rgba(0,0,0,.15)', animation: 'floatY 3s ease-in-out infinite' }}
+              style={{ bottom: -18, left: -32, background: 'rgba(255,255,255,.97)', padding: '14px 18px', boxShadow: '0 10px 40px rgba(0,0,0,.15)', animation: 'floatY 3s ease-in-out infinite', willChange: 'transform' }}
             >
               <div style={{ width: 42, height: 42, borderRadius: 12, background: 'rgba(45,106,79,.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', flexShrink: 0 }}>✅</div>
               <div>
@@ -225,7 +225,7 @@ export default function HeroSection() {
 
             <div
               className="hcard2 absolute flex items-center gap-3 rounded-2xl"
-              style={{ top: -18, right: -32, background: 'rgba(255,255,255,.96)', backdropFilter: 'blur(20px)', padding: '14px 18px', boxShadow: '0 10px 40px rgba(0,0,0,.15)', animation: 'floatY 3s ease-in-out infinite -1.5s' }}
+              style={{ top: -18, right: -32, background: 'rgba(255,255,255,.97)', padding: '14px 18px', boxShadow: '0 10px 40px rgba(0,0,0,.15)', animation: 'floatY 3s ease-in-out infinite -1.5s', willChange: 'transform' }}
             >
               <div style={{ width: 42, height: 42, borderRadius: 12, background: 'rgba(255,107,53,.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', flexShrink: 0 }}>🐶</div>
               <div>

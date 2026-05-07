@@ -22,7 +22,7 @@ export default function Loader() {
     import('gsap').then(({ gsap }) => {
       gsap.set(logoRef.current,  { opacity: 0, y: 24 })
       gsap.set(subRef.current,   { opacity: 0, y: 10 })
-      gsap.set(fillRef.current,  { width: '0%' })
+      gsap.set(fillRef.current,  { scaleX: 0, transformOrigin: 'left center' })
 
       const tl = gsap.timeline({
         onComplete: () => {
@@ -35,7 +35,7 @@ export default function Loader() {
 
       tl.to(logoRef.current,  { opacity: 1, y: 0, duration: 0.5,  ease: 'power3.out' })
         .to(subRef.current,   { opacity: 1, y: 0, duration: 0.35, ease: 'power3.out' }, '-=0.15')
-        .to(fillRef.current,  { width: '100%', duration: 1.1, ease: 'power1.inOut' }, '-=0.1')
+        .to(fillRef.current,  { scaleX: 1, duration: 1.1, ease: 'power1.inOut' }, '-=0.1')
         .to({}, { duration: 0.2 })
     })
   }, [])
