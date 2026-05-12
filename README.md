@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RUPER — Alimentos Balanceados · Malargüe
 
-## Getting Started
+Sitio web oficial de RUPER, veterinaria y distribuidora de alimentos balanceados en Malargüe, Mendoza. Permite a los clientes explorar el catálogo, filtrar por tipo de animal y enviar pedidos directamente por WhatsApp.
 
-First, run the development server:
+🌐 **[web-ruper.vercel.app](https://web-ruper.vercel.app)**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## Stack
+
+| Tecnología | Uso |
+|---|---|
+| [Next.js 16](https://nextjs.org) | Framework (App Router, SSR, ISR) |
+| [React 19](https://react.dev) | UI |
+| [TypeScript](https://www.typescriptlang.org) | Tipado estático |
+| [Tailwind CSS 4](https://tailwindcss.com) | Estilos |
+| [Supabase](https://supabase.com) | Base de datos (productos) |
+| [Cloudinary](https://cloudinary.com) | Hosting y optimización de imágenes |
+| [GSAP](https://gsap.com) | Animaciones |
+| [Vercel](https://vercel.com) | Deploy |
+
+---
+
+## Funcionalidades
+
+- **Catálogo de productos** con filtros por animal (perros, gatos, granja, accesorios)
+- **Selector de animal** con filtros de raza, etapa de vida y línea
+- **Carrito de pedido** — envío directo a WhatsApp con resumen
+- **Panel de administración** protegido con contraseña para gestionar productos
+- **Subida de imágenes** con compresión automática a WebP y remoción de fondo por canvas
+- **Optimización automática** de imágenes via Cloudinary CDN
+- **Diseño responsive** con navegación mobile dedicada
+
+---
+
+## Variables de entorno
+
+Crear un archivo `.env.local` con:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=
+NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET=
+ADMIN_PASSWORD=
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Desarrollo local
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm install
+npm run dev
+```
 
-## Learn More
+Abrir [http://localhost:3000](http://localhost:3000)
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploy
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+El proyecto se despliega automáticamente en Vercel al hacer push a `main`.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+git push origin main
+```
