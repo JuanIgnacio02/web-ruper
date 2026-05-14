@@ -27,7 +27,7 @@ export default function ProductCard({ product: p }: { product: Product }) {
   return (
     <Link
       href={`/producto/${p.id}`}
-      className="prod-card-anim group relative bg-white rounded-[var(--radius)] overflow-hidden shadow-[var(--shadow)] hover:-translate-y-2 hover:shadow-[var(--shadow-lg)] transition-[transform,box-shadow] duration-300 block active:scale-[.98]"
+      className="prod-card-anim group relative bg-white rounded-[var(--radius)] overflow-hidden shadow-[var(--shadow)] hover:-translate-y-2 hover:shadow-[var(--shadow-lg)] transition-[transform,box-shadow] duration-300 flex flex-col active:scale-[.98]"
     >
       {/* Badge */}
       {p.badge && (
@@ -59,7 +59,7 @@ export default function ProductCard({ product: p }: { product: Product }) {
       </div>
 
       {/* Info */}
-      <div className="px-3.5 pt-3 pb-3.5 sm:px-5 sm:pt-[18px] sm:pb-5">
+      <div className="px-3.5 pt-3 pb-3.5 sm:px-5 sm:pt-[18px] sm:pb-5 flex flex-col flex-1">
         <div className="prod-cat text-[.6rem] sm:text-[.68rem] font-bold text-[var(--primary)] uppercase tracking-[1.5px] mb-1">
           {p.subcategory ?? p.category}
         </div>
@@ -71,7 +71,7 @@ export default function ProductCard({ product: p }: { product: Product }) {
         </p>
 
         {/* Price + ATC */}
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center justify-between gap-2 mt-auto">
           <div className="prod-price font-black text-[1.1rem] sm:text-[1.22rem] text-[var(--dark)]">
             <span className="text-[.65rem] sm:text-[.7rem] font-semibold mr-0.5">$</span>
             {p.price.toLocaleString('es-AR')}
