@@ -86,7 +86,7 @@ export default function ProductsSection({ visible, active, onFilter }: Props) {
             </div>
           ) : (
             visible.map(p => (
-              <div key={p.id} className="prod-card-anim">
+              <div key={p.id} className="prod-card-anim h-full">
                 <ProductCard product={p} />
               </div>
             ))

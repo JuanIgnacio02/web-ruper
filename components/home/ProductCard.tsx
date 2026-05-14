@@ -27,7 +27,7 @@ export default function ProductCard({ product: p }: { product: Product }) {
   return (
     <Link
       href={`/producto/${p.id}`}
-      className="prod-card-anim group relative bg-white rounded-[var(--radius)] overflow-hidden shadow-[var(--shadow)] hover:-translate-y-2 hover:shadow-[var(--shadow-lg)] transition-[transform,box-shadow] duration-300 flex flex-col active:scale-[.98]"
+      className="prod-card-anim group relative bg-white rounded-[var(--radius)] overflow-hidden shadow-[var(--shadow)] hover:-translate-y-2 hover:shadow-[var(--shadow-lg)] transition-[transform,box-shadow] duration-300 flex flex-col h-full active:scale-[.98]"
     >
       {/* Badge */}
       {p.badge && (
