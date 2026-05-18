@@ -29,14 +29,19 @@ export default function BrandsSection() {
   const [canRight, setCanRight] = useState(true)
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let ctx: any
     import('gsap').then(async ({ gsap }) => {
       const { ScrollTrigger } = await import('gsap/ScrollTrigger')
       gsap.registerPlugin(ScrollTrigger)
-      gsap.from('.brand-logo', {
-        scrollTrigger: { trigger: '.brands-track', start: 'top 90%', once: true },
-        opacity: 0, y: 12, duration: 0.35, stagger: 0.04, ease: 'power2.out', clearProps: 'all',
+      ctx = gsap.context(() => {
+        gsap.from('.brand-logo', {
+          scrollTrigger: { trigger: '.brands-track', start: 'top 90%', once: true },
+          opacity: 0, y: 12, duration: 0.35, stagger: 0.04, ease: 'power2.out', clearProps: 'all',
+        })
       })
     })
+    return () => ctx?.revert()
   }, [])
 
   const syncArrows = () => {
