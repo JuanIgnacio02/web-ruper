@@ -74,18 +74,18 @@ export default function AnimalSelector({ activeAnimal, onFilter }: Props) {
 
   /* GSAP scroll animation */
   useEffect(() => {
+    let ctx: ReturnType<typeof import('gsap')['gsap']['context']> | undefined
     import('gsap').then(async ({ gsap }) => {
       const { ScrollTrigger } = await import('gsap/ScrollTrigger')
       gsap.registerPlugin(ScrollTrigger)
-      gsap.from('.as-panel', {
-        scrollTrigger: { trigger: '.animal-selector', start: 'top 82%', once: true },
-        y: 80,
-        duration: 0.75,
-        stagger: 0.18,
-        ease: 'power3.out',
-        clearProps: 'transform',
+      ctx = gsap.context(() => {
+        gsap.from('.as-panel', {
+          scrollTrigger: { trigger: '.animal-selector', start: 'top 82%', once: true },
+          y: 80, duration: 0.75, stagger: 0.18, ease: 'power3.out', clearProps: 'transform',
+        })
       })
     })
+    return () => ctx?.revert()
   }, [])
 
   const setSelect = (animal: AnimalCategory, key: keyof ProductFilters, value: string) =>

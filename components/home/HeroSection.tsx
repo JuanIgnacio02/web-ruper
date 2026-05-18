@@ -34,63 +34,67 @@ export default function HeroSection() {
 
   /* ── GSAP animations ── */
   useEffect(() => {
+    let ctx: ReturnType<typeof import('gsap')['gsap']['context']> | undefined
     import('gsap').then(async ({ gsap }) => {
       const { ScrollTrigger } = await import('gsap/ScrollTrigger')
       gsap.registerPlugin(ScrollTrigger)
 
-      // gsap.matchMedia(): respeta prefers-reduced-motion automáticamente.
-      // Si el usuario prefiere sin animaciones, las duraciones se ponen a 0.
-      const mm = gsap.matchMedia()
-      mm.add(
-        {
-          reduceMotion: '(prefers-reduced-motion: reduce)',
-          isDesktop:    '(min-width: 1024px)',
-        },
-        (ctx) => {
-          const { reduceMotion, isDesktop } = ctx.conditions!
-          const d = (n: number) => reduceMotion ? 0 : n
+      ctx = gsap.context(() => {
+        // gsap.matchMedia(): respeta prefers-reduced-motion automáticamente.
+        // Si el usuario prefiere sin animaciones, las duraciones se ponen a 0.
+        const mm = gsap.matchMedia()
+        mm.add(
+          {
+            reduceMotion: '(prefers-reduced-motion: reduce)',
+            isDesktop:    '(min-width: 1024px)',
+          },
+          (ctx) => {
+            const { reduceMotion, isDesktop } = ctx.conditions!
+            const d = (n: number) => reduceMotion ? 0 : n
 
-          /* Hero entrance */
-          const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
-          tl.from('.hero-badge',  { y: -22, autoAlpha: 0, duration: d(0.5) })
-            .from('.hero-title',  { y: 64,  autoAlpha: 0, duration: d(0.75), ease: 'power4.out' }, '-=0.22')
-            .from('.hero-desc',   { y: 36,  autoAlpha: 0, duration: d(0.6) }, '-=0.38')
-            .from('.hero-btn',    { y: 22,  autoAlpha: 0, duration: d(0.48), stagger: 0.12 }, '-=0.32')
-            .from('.hero-stat',   { y: 18,  autoAlpha: 0, duration: d(0.42), stagger: 0.13 }, '-=0.28')
-            .from('.hero-visual', { x: 80,  autoAlpha: 0, duration: d(0.85) }, '-=0.75')
-            .from('.hcard1',      { x: 36,  autoAlpha: 0, scale: 0.88, duration: d(0.52), ease: 'back.out(1.6)' }, '-=0.42')
-            .from('.hcard2',      { x: -36, autoAlpha: 0, scale: 0.88, duration: d(0.52), ease: 'back.out(1.6)' }, '-=0.44')
+            /* Hero entrance */
+            const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+            tl.from('.hero-badge',  { y: -22, autoAlpha: 0, duration: d(0.5) })
+              .from('.hero-title',  { y: 64,  autoAlpha: 0, duration: d(0.75), ease: 'power4.out' }, '-=0.22')
+              .from('.hero-desc',   { y: 36,  autoAlpha: 0, duration: d(0.6) }, '-=0.38')
+              .from('.hero-btn',    { y: 22,  autoAlpha: 0, duration: d(0.48), stagger: 0.12 }, '-=0.32')
+              .from('.hero-stat',   { y: 18,  autoAlpha: 0, duration: d(0.42), stagger: 0.13 }, '-=0.28')
+              .from('.hero-visual', { x: 80,  autoAlpha: 0, duration: d(0.85) }, '-=0.75')
+              .from('.hcard1',      { x: 36,  autoAlpha: 0, scale: 0.88, duration: d(0.52), ease: 'back.out(1.6)' }, '-=0.42')
+              .from('.hcard2',      { x: -36, autoAlpha: 0, scale: 0.88, duration: d(0.52), ease: 'back.out(1.6)' }, '-=0.44')
 
-          /* Stat counters */
-          document.querySelectorAll<HTMLElement>('.stat-num').forEach(el => {
-            const target = parseInt(el.dataset.target ?? '0', 10)
-            if (!target) return
-            const obj = { val: 0 }
-            ScrollTrigger.create({
-              trigger: el, start: 'top 90%', once: true,
-              onEnter: () => {
-                gsap.to(obj, {
-                  val: target, duration: reduceMotion ? 0 : 1.8, ease: 'power2.out',
-                  onUpdate() { el.textContent = String(Math.round(obj.val)) },
-                })
-              },
+            /* Stat counters */
+            document.querySelectorAll<HTMLElement>('.stat-num').forEach(el => {
+              const target = parseInt(el.dataset.target ?? '0', 10)
+              if (!target) return
+              const obj = { val: 0 }
+              ScrollTrigger.create({
+                trigger: el, start: 'top 90%', once: true,
+                onEnter: () => {
+                  gsap.to(obj, {
+                    val: target, duration: reduceMotion ? 0 : 1.8, ease: 'power2.out',
+                    onUpdate() { el.textContent = String(Math.round(obj.val)) },
+                  })
+                },
+              })
             })
-          })
 
-          /* Parallax — solo en desktop para no degradar mobile perf */
-          if (isDesktop && !reduceMotion) {
-            gsap.to('.hero-content', {
-              scrollTrigger: { trigger: '#inicio', scrub: 1.2 },
-              y: 90, ease: 'none',
-            })
-            gsap.to('.hero-visual', {
-              scrollTrigger: { trigger: '#inicio', scrub: 1.8 },
-              y: 55, ease: 'none',
-            })
+            /* Parallax — solo en desktop para no degradar mobile perf */
+            if (isDesktop && !reduceMotion) {
+              gsap.to('.hero-content', {
+                scrollTrigger: { trigger: '#inicio', scrub: 1.2 },
+                y: 90, ease: 'none',
+              })
+              gsap.to('.hero-visual', {
+                scrollTrigger: { trigger: '#inicio', scrub: 1.8 },
+                y: 55, ease: 'none',
+              })
+            }
           }
-        }
-      )
+        )
+      })
     })
+    return () => ctx?.revert()
   }, [])
 
   return (

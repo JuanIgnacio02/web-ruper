@@ -6,6 +6,7 @@ import type { Product } from '@/types'
 import { useCart } from '@/hooks/useCart'
 import { useToast } from '@/hooks/useToast'
 import { getProductBg } from '@/lib/constants'
+import { getOptimizedUrl } from '@/lib/cloudinary'
 
 export default function ProductCard({ product: p }: { product: Product }) {
   const { add }        = useCart()
@@ -43,7 +44,7 @@ export default function ProductCard({ product: p }: { product: Product }) {
       >
         {p.img ? (
           <Image
-            src={p.img}
+            src={getOptimizedUrl(p.img, 400)}
             alt={p.name}
             width={180}
             height={180}

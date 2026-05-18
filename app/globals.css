@@ -87,6 +87,7 @@
   font-size: 1.8rem;
   animation: pawRise linear infinite;
   user-select: none;
+  will-change: transform, opacity;
 }
 
 /* ── Hero blur shapes — ocultos en mobile ──────────────────────────────────
@@ -100,7 +101,7 @@
 /* ── Mobile bottom nav spacing ── */
 @media (max-width: 767px) {
   /* Reserve space for the bottom nav (≈60px + safe area) */
-  body { padding-bottom: calc(60px + env(safe-area-inset-bottom)); }
+  body { padding-bottom: calc(60px + env(safe-area-inset-bottom)); overscroll-behavior-y: contain; }
 
   /* Momentum scrolling on iOS */
   .overflow-x-auto,

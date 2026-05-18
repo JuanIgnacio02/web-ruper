@@ -32,21 +32,29 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: '#FF6B35',
+  viewportFit: 'cover',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" className={`${poppins.variable} ${fredoka.variable}`}>
       <head>
-        {/* Preconnect: abre la conexión TCP/TLS al CDN antes de que el parser
-            llegue al <link> de FA — ahorra ~200-400ms en primera visita */}
+        {/* Font Awesome: non-render-blocking via preload+print trick */}
         <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
         <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
+        <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style" crossOrigin="anonymous" />
+        {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
           crossOrigin="anonymous"
+          media="print"
+          // @ts-expect-error – raw string needed for non-render-blocking CSS trick (runs as HTML attribute, not React handler)
+          onLoad="this.media='all'"
         />
+        <noscript>
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossOrigin="anonymous" />
+        </noscript>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
           '@context': 'https://schema.org',
           '@type': 'PetStore',

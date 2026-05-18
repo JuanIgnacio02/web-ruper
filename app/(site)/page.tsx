@@ -1,3 +1,5 @@
+export const revalidate = 300
+
 import { getProducts }         from '@/lib/supabase/queries'
 import HeroSection             from '@/components/home/HeroSection'
 import TrustBar                from '@/components/home/TrustBar'

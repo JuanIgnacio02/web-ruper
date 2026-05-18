@@ -105,10 +105,8 @@ export default function BrandsSection() {
                 src={logo.src}
                 alt={logo.alt}
                 width={120} height={60}
-                className="object-contain w-full h-full transition-[filter,transform] duration-300 group-hover:scale-105"
+                className="object-contain w-full h-full transition-[filter,transform] duration-300 group-hover:scale-105 group-hover:[filter:grayscale(0%)_opacity(1)]"
                 style={{ filter: 'grayscale(40%) opacity(.65)' }}
-                onMouseEnter={e => (e.currentTarget.style.filter = 'grayscale(0%) opacity(1)')}
-                onMouseLeave={e => (e.currentTarget.style.filter = 'grayscale(40%) opacity(.65)')}
                 loading="lazy"
               />
             </div>

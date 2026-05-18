@@ -24,7 +24,7 @@ export default function NavbarClient() {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-[999] transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-[999] transition-[background-color,padding,box-shadow] duration-300 ${
           scrolled
             ? 'bg-white/97 backdrop-blur-xl shadow-[0_2px_20px_rgba(0,0,0,.08)] py-[10px] md:py-[13px]'
             : 'py-[14px] md:py-[22px]'
