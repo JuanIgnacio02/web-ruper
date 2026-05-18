@@ -51,7 +51,7 @@ export default function ProductCard({ product: p }: { product: Product }) {
             // sizes: le dice al browser qué ancho real tendrá la imagen en cada breakpoint.
             // Sin esto, Next.js descarga el tamaño equivocado → LCP lento + datos de más.
             sizes="(max-width: 640px) 160px, (max-width: 768px) 190px, 210px"
-            className="w-full h-full object-contain p-3 group-hover:scale-110 transition-transform duration-500"
+            className="w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-500"
             loading="lazy"
           />
         ) : (
